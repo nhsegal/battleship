@@ -1,0 +1,24 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhsegal/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nhsegal/battleship/issues"
+  },
+  "homepage": "https://github.com/nhsegal/battleship#readme",
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "jest": "^29.2.2"
+  }
+}
