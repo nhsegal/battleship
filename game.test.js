@@ -47,7 +47,6 @@ describe("Gameboard factory", () => {
         .toThrow("Ship partially out of bounds")
     );
   });
-
   it("Should register received attacks on head of ship", () => {
     let testGameboard = game.Gameboard();
     testGameboard.placeShip(4, 3, 2, "x");
@@ -74,7 +73,6 @@ describe("Gameboard factory", () => {
     expect(testGameboard.shotRecord[1]).toEqual([4, 2]);
     expect(testGameboard.myShips[1].hitNumber).toBe(1);
   });
-
   it("Should report whether all are sunk", () => {
     let testGameboard = game.Gameboard();
     testGameboard.placeShip(4, 3, 2, "x");
@@ -82,15 +80,34 @@ describe("Gameboard factory", () => {
 
     testGameboard.receiveAttack(3, 2);
     testGameboard.receiveAttack(4, 2);
-   testGameboard.receiveAttack(5, 2);
+    testGameboard.receiveAttack(5, 2);
     testGameboard.receiveAttack(6, 2);
     expect(testGameboard.allSunk()).toBe(false);
-    
+
     testGameboard.receiveAttack(1, 1);
     testGameboard.receiveAttack(1, 2);
     testGameboard.receiveAttack(1, 3);
 
     expect(testGameboard.allSunk()).toBe(true);
+  });
+});
 
-  })
+describe("Player factory", () => {
+  const testPlayer1 = game.Player();
+  const testPlayer2 = game.Player();
+  testPlayer1.gameboard.placeShip(2, 0, 0, "x");
+  testPlayer2.gameboard.placeShip(4, 1, 1, "y");
+  describe("Attack method", () => {
+    it("Should register successful attacks", () => {
+      expect(testPlayer1.attack(testPlayer2, 1, 3)).toBe(true);
+    });
+    it("Should register unsucessful attacks", () => {
+      expect(testPlayer1.attack(testPlayer2, 2, 3)).toBe(false);
+    });
+    it("Should prevent redundant attacks", () => {
+      expect(() => testPlayer1.attack(testPlayer2, 1, 3)).toThrow(
+        "Attack redundant"
+      );
+    });
+  });
 });
