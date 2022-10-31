@@ -65,7 +65,7 @@ const Gameboard = () => {
             (entry) => entry.x === xi + i && entry.y === yi
           ).length > 0
         ) {
-           throw new Error("Another ship is in the way");
+          throw new Error("Another ship is in the way");
         }
       }
     }
@@ -144,7 +144,7 @@ const Player = () => {
       opponent.gameboard.shotRecord.filter((e) => e[0] === x && e[1] === y)
         .length != 0
     ) {
-      throw new Error("Attack redundant");
+     throw new Error("Attack redundant");
     }
     return opponent.gameboard.receiveAttack(x, y);
   };
@@ -157,13 +157,13 @@ const Player = () => {
 let human = Player();
 let computer = Player();
 
-
 // Computer places pieces on its board:
 computer.gameboard.fleet.forEach((ship, index, arr) => {
   let orientation = Math.random();
   let xpos = null;
   let ypos = null;
   let axis = null;
+  // Randomally pick an axis location that fits the ship 
   if (orientation > 0.5) {
     axis = "x";
     xpos = Math.floor(
@@ -176,19 +176,8 @@ computer.gameboard.fleet.forEach((ship, index, arr) => {
     ypos = Math.floor(
       Math.random() * (computer.gameboard.boardLength - ship.length)
     );
-    for (let i = 0; i < ship.length; i++) {
-      while (
-        computer.gameboard.occupiedSquares.filter(
-          (entry) => entry.x === xpos && entry.y === ypos + i
-        ).length > 0
-      ) {
-        xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
-        ypos = Math.floor(
-          Math.random() * (computer.gameboard.boardLength - ship.length)
-        );
-      }
-    }
   }
+  // If it clashes with a placed ship repick
   while (
     isBlocked(ship, axis, xpos, ypos, computer.gameboard.occupiedSquares)
   ) {
@@ -205,18 +194,6 @@ computer.gameboard.fleet.forEach((ship, index, arr) => {
       ypos = Math.floor(
         Math.random() * (computer.gameboard.boardLength - ship.length)
       );
-      for (let i = 0; i < ship.length; i++) {
-        while (
-          computer.gameboard.occupiedSquares.filter(
-            (entry) => entry.x === xpos && entry.y === ypos + i
-          ).length > 0
-        ) {
-          xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
-          ypos = Math.floor(
-            Math.random() * (computer.gameboard.boardLength - ship.length)
-          );
-        }
-      }
     }
   }
   computer.gameboard.placeShip(ship.name, xpos, ypos, axis);
@@ -236,9 +213,7 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   for (let i = 0; i < coOrdinatesToTest.length; i++) {
     if (
       occSqArr.filter(
-        (e) => 
-        e.x === coOrdinatesToTest[i].x && 
-        e.y === coOrdinatesToTest[i].y
+        (e) => e.x === coOrdinatesToTest[i].x && e.y === coOrdinatesToTest[i].y
       ).length > 0
     ) {
       return true;
@@ -247,17 +222,23 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   return false;
 }
 /*
-let testArr = [{ x: 6, y: 3 }];
-let testShip = Ship(4, "Carrier");
-console.log(isBlocked(testShip, "x", 1, 3, testArr));
-
-
-let testGameboard = Gameboard();
-testGameboard.placeShip("Battleship", 1, 2, "y");
-testGameboard
-    .placeShip("Submarine", 2, 2, "x")s
-  */
-
+let arr = [];
+for (const ship of computer.gameboard.fleet) {
+  if (ship.axis === "x") {
+    for (let i = 0; i < ship.length; i++) {
+      arr.push(ship.x + i + 10 * ship.y);
+    }
+  }
+  if (ship.axis === "y") {
+    for (let i = 0; i < ship.length; i++) {
+      arr.push(ship.x + 10 * ship.y + 10 * i);
+    }
+  }
+}
+let set = new Set(arr);
+console.log(set.size) 
+console.log(arr.length)
+*/
 module.exports = {
   Ship,
   Gameboard,

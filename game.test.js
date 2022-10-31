@@ -65,7 +65,6 @@ describe("Gameboard factory", () => {
         .toThrow("Another ship is in the way")
     );
   });
-  
 
   it("Should register received attacks on head of ship", () => {
     let testGameboard = game.Gameboard();
@@ -151,6 +150,7 @@ describe("Player factory", () => {
   });
 });
 
+
 describe("Computer Player", () => {
   describe("Should always place its fleet legally", () => {
     it("Should place the head in bounds", () => {
@@ -176,15 +176,23 @@ describe("Computer Player", () => {
     });
 
     it("Should not have overlapping ships", () => {
+      let arr = [];
       for (const ship of game.computer.gameboard.fleet) {
-        if (ship.axis === 'x'){
-
+        if (ship.axis === "x") {
+          for (let i = 0; i < ship.length; i++) {
+            arr.push(ship.x + i + 10 * ship.y);
+          }
         }
-        if (ship.axis === 'y'){
-          
+        if (ship.axis === "y") {
+          for (let i = 0; i < ship.length; i++) {
+            arr.push(ship.x + 10 * ship.y + 10 * i);
+          }
         }
-        expect();
       }
+      let set = new Set(arr);
+      console.log(set.size)
+      console.log(arr.length)
+      expect(set.size === arr.length);
     });
   });
 });
