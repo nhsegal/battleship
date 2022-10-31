@@ -52,10 +52,10 @@ describe("Gameboard factory", () => {
     expect(() =>
       testGameboard
         .placeShip("Submarine", 3, 2, "x")
-        .toThrow("Another ship is in the way");
+        .toThrow("Another ship is in the way")
     );
   });
-/*
+
   it("Should throw an error when ships overlap", () => {
     let testGameboard = game.Gameboard();
     testGameboard.placeShip("Battleship", 1, 2, "y");
@@ -65,7 +65,7 @@ describe("Gameboard factory", () => {
         .toThrow("Another ship is in the way")
     );
   });
-  */
+  
 
   it("Should register received attacks on head of ship", () => {
     let testGameboard = game.Gameboard();
@@ -163,6 +163,7 @@ describe("Computer Player", () => {
         );
       }
     });
+
     it("Should place each ship fully in bounds", () => {
       for (const ship of game.computer.gameboard.fleet) {
         if ((ship.axis = "x")) {
@@ -176,6 +177,12 @@ describe("Computer Player", () => {
 
     it("Should not have overlapping ships", () => {
       for (const ship of game.computer.gameboard.fleet) {
+        if (ship.axis === 'x'){
+
+        }
+        if (ship.axis === 'y'){
+          
+        }
         expect();
       }
     });
