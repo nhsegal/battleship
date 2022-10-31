@@ -35,7 +35,6 @@ describe("Gameboard factory", () => {
     expect(testShip.x).toBe(1);
     expect(testShip.y).toBe(2);
   });
-
   it("Should throw an error when ship placed out of bounds", () => {
     let testGameboard = game.Gameboard();
     expect(() => testGameboard.placeShip("Battleship", -11, 2, "y")).toThrow(
@@ -47,12 +46,34 @@ describe("Gameboard factory", () => {
         .toThrow("Ship partially out of bounds")
     );
   });
+  it("Should throw an error when ships have same position", () => {
+    let testGameboard = game.Gameboard();
+    testGameboard.placeShip("Battleship", 1, 2, "y");
+    expect(() =>
+      testGameboard
+        .placeShip("Submarine", 3, 2, "x")
+        .toThrow("Another ship is in the way");
+    );
+  });
+/*
+  it("Should throw an error when ships overlap", () => {
+    let testGameboard = game.Gameboard();
+    testGameboard.placeShip("Battleship", 1, 2, "y");
+    expect(() =>
+      testGameboard
+        .placeShip("Submarine", 0, 3, "x")
+        .toThrow("Another ship is in the way")
+    );
+  });
+  */
 
   it("Should register received attacks on head of ship", () => {
     let testGameboard = game.Gameboard();
     testGameboard.placeShip("Battleship", 3, 2, "x");
     testGameboard.receiveAttack(3, 2);
-    let boat = testGameboard.fleet.filter( (item) => item.name === "Battleship" )[0]
+    let boat = testGameboard.fleet.filter(
+      (item) => item.name === "Battleship"
+    )[0];
     expect(testGameboard.shotRecord[0]).toEqual([3, 2]);
     expect(boat.hitNumber).toBe(1);
   });
@@ -63,7 +84,6 @@ describe("Gameboard factory", () => {
     expect(testGameboard.shotRecord[0]).toEqual([4, 2]);
     expect(testGameboard.fleet[0].hitNumber).toBe(0);
   });
-
   it("Should register received attacks on body of ship", () => {
     let testGameboard = game.Gameboard();
     testGameboard.placeShip("Battleship", 3, 2, "x");
@@ -78,11 +98,11 @@ describe("Gameboard factory", () => {
   });
   it("Should report whether all are sunk", () => {
     let testGameboard = game.Gameboard();
-    testGameboard.placeShip( "Carrier", 1, 1, "y");
-    testGameboard.placeShip( "Battleship", 2, 2, "y");
-    testGameboard.placeShip( "Cruiser", 3, 3, "y");
+    testGameboard.placeShip("Carrier", 1, 1, "y");
+    testGameboard.placeShip("Battleship", 2, 2, "y");
+    testGameboard.placeShip("Cruiser", 3, 3, "y");
     testGameboard.placeShip("Submarine", 4, 4, "y");
-    testGameboard.placeShip( "Destroyer", 5, 5, "y");
+    testGameboard.placeShip("Destroyer", 5, 5, "y");
 
     testGameboard.receiveAttack(1, 1);
     testGameboard.receiveAttack(1, 2);
@@ -103,7 +123,7 @@ describe("Gameboard factory", () => {
     testGameboard.receiveAttack(4, 4);
     testGameboard.receiveAttack(4, 5);
     testGameboard.receiveAttack(4, 6);
-  
+
     testGameboard.receiveAttack(5, 5);
     testGameboard.receiveAttack(5, 6);
 
@@ -127,6 +147,37 @@ describe("Player factory", () => {
       expect(() => testPlayer1.attack(testPlayer2, 1, 3)).toThrow(
         "Attack redundant"
       );
+    });
+  });
+});
+
+describe("Computer Player", () => {
+  describe("Should always place its fleet legally", () => {
+    it("Should place the head in bounds", () => {
+      for (const ship of game.computer.gameboard.fleet) {
+        expect(
+          ship.x >= 0 &&
+            ship.y >= 0 &&
+            ship.x < game.computer.gameboard.boardLength &&
+            ship.y < game.computer.gameboard.boardLength
+        );
+      }
+    });
+    it("Should place each ship fully in bounds", () => {
+      for (const ship of game.computer.gameboard.fleet) {
+        if ((ship.axis = "x")) {
+          expect(ship.x + ship.length < game.computer.gameboard.boardLength);
+        }
+        if ((ship.axis = "y")) {
+          expect(ship.y + ship.length < game.computer.gameboard.boardLength);
+        }
+      }
+    });
+
+    it("Should not have overlapping ships", () => {
+      for (const ship of game.computer.gameboard.fleet) {
+        expect();
+      }
     });
   });
 });

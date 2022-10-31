@@ -1,8 +1,8 @@
-/// Use some sort of spread operator or destructuring to 
-/// change fleet so there is no properites key, just name 
+/// Use some sort of spread operator or destructuring to
+/// change fleet so there is no properites key, just name
 /// and the returned values of ship
 
-const Ship = (len, name=null, xi=null, yi=null, _axis=null) => {
+const Ship = (len, name = null, xi = null, yi = null, _axis = null) => {
   let _hitNumber = 0;
   const x = xi;
   const y = yi;
@@ -10,7 +10,7 @@ const Ship = (len, name=null, xi=null, yi=null, _axis=null) => {
   let length = len;
   const hit = () => {
     _hitNumber = _hitNumber + 1;
-    return _hitNumber
+    return _hitNumber;
   };
   const isSunk = () => {
     if (_hitNumber >= length) {
@@ -45,9 +45,9 @@ const Fleet = () => {
 const Gameboard = () => {
   const boardLength = 10;
   const fleet = Fleet();
+  const occupiedSquares = [];
   const placeShip = (name, xi, yi, axis) => {
-    let ship = fleet.filter( (item) => item.name === name )[0];
-  
+    let ship = fleet.filter((item) => item.name === name)[0];
     if (xi < 0 || xi > boardLength - 1 || yi < 0 || yi > boardLength - 1) {
       throw new Error("Location out of bounds");
     }
@@ -57,10 +57,41 @@ const Gameboard = () => {
     ) {
       throw new Error("Ship partially out of bounds");
     }
+
+    if (axis === "x") {
+      for (let i = 0; i < ship.length; i++) {
+        if (
+          occupiedSquares.filter(
+            (entry) => entry.x === xi + i && entry.y === yi
+          ).length > 0
+        ) {
+          throw new Error("Another ship is in the way");
+        }
+      }
+    }
+    if (axis === "y") {
+      for (let i = 0; i < ship.length; i++) {
+        if (
+          occupiedSquares.filter(
+            (entry) => entry.x === xi && entry.y === yi + i
+          ).length > 0
+        ) {
+          throw new Error("Another ship is in the way");
+        }
+      }
+    }
+
     ship.x = xi;
     ship.y = yi;
     ship.axis = axis;
-    return ship
+    for (let i = 0; i < ship.length; i++) {
+      if (axis === "x") {
+        occupiedSquares.push({ x: ship.x + i, y: ship.y });
+      } else {
+        occupiedSquares.push({ x: ship.x, y: ship.y + i });
+      }
+    }
+    return ship;
   };
   const shotRecord = [];
   const receiveAttack = (x, y) => {
@@ -68,17 +99,16 @@ const Gameboard = () => {
     let success = false;
     fleet.forEach((ship) => {
       if (ship.axis === "x") {
-        if ((x >= ship.x) && (x < ship.x + ship.length) && (y === ship.y)) {
-          ship.hit()  
-          console.log("hit")       
+        if (x >= ship.x && x < ship.x + ship.length && y === ship.y) {
+          ship.hit();
           success = true;
-          return success
+          return success;
         }
       } else if (ship.axis === "y") {
         if (x === ship.x && y >= ship.y && y < ship.y + ship.length) {
           ship.hit();
           success = true;
-          return success
+          return success;
         }
       }
     });
@@ -89,12 +119,13 @@ const Gameboard = () => {
   };
 
   return {
+    boardLength,
     fleet,
+    occupiedSquares,
     placeShip,
     shotRecord,
     receiveAttack,
     allSunk,
-    boardLength,
   };
 };
 
@@ -123,43 +154,106 @@ const Player = () => {
   };
 };
 
+let human = Player();
+let computer = Player();
 
+// Computer places pieces on its board:
+computer.gameboard.fleet.forEach((ship, index, arr) => {
+  let orientation = Math.random();
+  let xpos = null;
+  let ypos = null;
+  let axis = null;
+  if (orientation > 0.5) {
+    axis = "x";
+    xpos = Math.floor(
+      Math.random() * (computer.gameboard.boardLength - ship.length)
+    );
+    ypos = Math.floor(Math.random() * computer.gameboard.boardLength);
+   
+  } else {
+    axis = "y";
+    xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
+    ypos = Math.floor(
+      Math.random() * (computer.gameboard.boardLength - ship.length)
+    );
+    for (let i = 0; i < ship.length; i++) {
+      while (
+        computer.gameboard.occupiedSquares.filter(
+          (entry) => entry.x === xpos && entry.y === ypos + i
+        ).length > 0
+      ) {
+        xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
+        ypos = Math.floor(
+          Math.random() * (computer.gameboard.boardLength - ship.length)
+        );
+      }
+    }
+  }
+  while (isBlocked(ship, axis, xpos, ypos, computer.gameboard.occupiedSquares)) {
+    orientation = Math.random();
+    if (orientation > 0.5) {
+      axis = "x";
+      xpos = Math.floor(
+        Math.random() * (computer.gameboard.boardLength - ship.length)
+      );
+      ypos = Math.floor(Math.random() * computer.gameboard.boardLength);
+     
+    } else {
+      axis = "y";
+      xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
+      ypos = Math.floor(
+        Math.random() * (computer.gameboard.boardLength - ship.length)
+      );
+      for (let i = 0; i < ship.length; i++) {
+        while (
+          computer.gameboard.occupiedSquares.filter(
+            (entry) => entry.x === xpos && entry.y === ypos + i
+          ).length > 0
+        ) {
+          xpos = Math.floor(Math.random() * computer.gameboard.boardLength);
+          ypos = Math.floor(
+            Math.random() * (computer.gameboard.boardLength - ship.length)
+          );
+        }
+      }
+    }
+  }
+  computer.gameboard.placeShip(ship.name, xpos, ypos, axis);
+});
 
-
-
-let testGameboard = Gameboard();
-testGameboard.placeShip("Carrier", 1, 1, "x");
-testGameboard.placeShip("Battleship", 2, 2, "x");
-testGameboard.placeShip("Cruiser", 3, 3, "x");
-testGameboard.placeShip("Submarine", 4, 4, "x");
-testGameboard.placeShip("Destroyer", 5, 5, "x");
-testGameboard.receiveAttack(1, 1);
-testGameboard.receiveAttack(1, 1);
-testGameboard.receiveAttack(1, 3);
-testGameboard.receiveAttack(1, 4);
-testGameboard.receiveAttack(1, 5);
+function isBlocked(ship, axis, xpos, ypos, occupiedSquaresArr) {
+  let blocks = [];
+  if (axis === "x") {
+    for (let i = 0; i < ship.length; i++) {
+      blocks = [...occupiedSquaresArr
+        .filter(
+          (entry) => entry.x === xpos + i && entry.y === ypos
+        )]
+      
+    }
+  } else {
+    for (let i = 0; i < ship.length; i++) {
+      blocks = [...occupiedSquaresArr
+        .filter(
+          (entry) => entry.x === xpos && entry.y === ypos + i
+        )]
+    }
+  }
+  console.log(blocks)
+  if (blocks.length > 0) return true;
+  return false;
+}
 
 /*
-testGameboard.receiveAttack(2, 2);
-testGameboard.receiveAttack(2, 3);
-testGameboard.receiveAttack(2, 4);
-testGameboard.receiveAttack(2, 4);
-
-testGameboard.receiveAttack(3, 3);
-testGameboard.receiveAttack(3, 4);
-testGameboard.receiveAttack(3, 5);
-
-testGameboard.receiveAttack(4, 4);
-testGameboard.receiveAttack(4, 5);
-testGameboard.receiveAttack(4, 6);
-
-testGameboard.receiveAttack(5, 5);
-testGameboard.receiveAttack(5, 6);
-*/
-//console.log(typeof(testGameboard.fleet[0].x))
+let testGameboard = Gameboard();
+testGameboard.placeShip("Battleship", 1, 2, "y");
+testGameboard
+    .placeShip("Submarine", 2, 2, "x")
+  */
 
 module.exports = {
   Ship,
   Gameboard,
   Player,
+  computer,
 };
