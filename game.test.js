@@ -31,62 +31,81 @@ describe("Ship factory", () => {
 describe("Gameboard factory", () => {
   it("Should return a ship with correct position", () => {
     let testGameboard = game.Gameboard();
-    let testShip = testGameboard.placeShip(3, 1, 2, "y");
+    let testShip = testGameboard.placeShip("Cruiser", 1, 2, "y");
     expect(testShip.x).toBe(1);
     expect(testShip.y).toBe(2);
   });
 
   it("Should throw an error when ship placed out of bounds", () => {
     let testGameboard = game.Gameboard();
-    expect(() => testGameboard.placeShip(4, -11, 2, "y")).toThrow(
+    expect(() => testGameboard.placeShip("Battleship", -11, 2, "y")).toThrow(
       "Location out of bounds"
     );
     expect(() =>
       testGameboard
-        .placeShip(3, 9, 2, "x")
+        .placeShip("Submarine", 9, 2, "x")
         .toThrow("Ship partially out of bounds")
     );
   });
+
   it("Should register received attacks on head of ship", () => {
     let testGameboard = game.Gameboard();
-    testGameboard.placeShip(4, 3, 2, "x");
+    testGameboard.placeShip("Battleship", 3, 2, "x");
     testGameboard.receiveAttack(3, 2);
+    let boat = testGameboard.fleet.filter( (item) => item.name === "Battleship" )[0]
     expect(testGameboard.shotRecord[0]).toEqual([3, 2]);
-    expect(testGameboard.myShips[0].hitNumber).toBe(1);
+    expect(boat.hitNumber).toBe(1);
   });
   it("Should register a missed shot", () => {
     let testGameboard = game.Gameboard();
-    testGameboard.placeShip(4, 3, 2);
+    testGameboard.placeShip("Battleship", 3, 2);
     testGameboard.receiveAttack(4, 2);
     expect(testGameboard.shotRecord[0]).toEqual([4, 2]);
-    expect(testGameboard.myShips[0].hitNumber).toBe(0);
+    expect(testGameboard.fleet[0].hitNumber).toBe(0);
   });
+
   it("Should register received attacks on body of ship", () => {
     let testGameboard = game.Gameboard();
-    testGameboard.placeShip(4, 3, 2, "x");
-    testGameboard.placeShip(3, 1, 1, "y");
+    testGameboard.placeShip("Battleship", 3, 2, "x");
+    testGameboard.placeShip("Submarine", 1, 1, "y");
     testGameboard.receiveAttack(5, 2);
     testGameboard.receiveAttack(4, 2);
     testGameboard.receiveAttack(1, 2);
     expect(testGameboard.shotRecord[0]).toEqual([5, 2]);
-    expect(testGameboard.myShips[0].hitNumber).toBe(2);
+    expect(testGameboard.fleet[1].hitNumber).toBe(2);
     expect(testGameboard.shotRecord[1]).toEqual([4, 2]);
-    expect(testGameboard.myShips[1].hitNumber).toBe(1);
+    expect(testGameboard.fleet[3].hitNumber).toBe(1);
   });
   it("Should report whether all are sunk", () => {
     let testGameboard = game.Gameboard();
-    testGameboard.placeShip(4, 3, 2, "x");
-    testGameboard.placeShip(3, 1, 1, "y");
-
-    testGameboard.receiveAttack(3, 2);
-    testGameboard.receiveAttack(4, 2);
-    testGameboard.receiveAttack(5, 2);
-    testGameboard.receiveAttack(6, 2);
-    expect(testGameboard.allSunk()).toBe(false);
+    testGameboard.placeShip( "Carrier", 1, 1, "y");
+    testGameboard.placeShip( "Battleship", 2, 2, "y");
+    testGameboard.placeShip( "Cruiser", 3, 3, "y");
+    testGameboard.placeShip("Submarine", 4, 4, "y");
+    testGameboard.placeShip( "Destroyer", 5, 5, "y");
 
     testGameboard.receiveAttack(1, 1);
     testGameboard.receiveAttack(1, 2);
     testGameboard.receiveAttack(1, 3);
+    testGameboard.receiveAttack(1, 4);
+    testGameboard.receiveAttack(1, 5);
+    expect(testGameboard.allSunk()).toBe(false);
+
+    testGameboard.receiveAttack(2, 2);
+    testGameboard.receiveAttack(2, 3);
+    testGameboard.receiveAttack(2, 4);
+    testGameboard.receiveAttack(2, 4);
+
+    testGameboard.receiveAttack(3, 3);
+    testGameboard.receiveAttack(3, 4);
+    testGameboard.receiveAttack(3, 5);
+
+    testGameboard.receiveAttack(4, 4);
+    testGameboard.receiveAttack(4, 5);
+    testGameboard.receiveAttack(4, 6);
+  
+    testGameboard.receiveAttack(5, 5);
+    testGameboard.receiveAttack(5, 6);
 
     expect(testGameboard.allSunk()).toBe(true);
   });
@@ -95,8 +114,8 @@ describe("Gameboard factory", () => {
 describe("Player factory", () => {
   const testPlayer1 = game.Player();
   const testPlayer2 = game.Player();
-  testPlayer1.gameboard.placeShip(2, 0, 0, "x");
-  testPlayer2.gameboard.placeShip(4, 1, 1, "y");
+  testPlayer1.gameboard.placeShip("Destroyer", 0, 0, "x");
+  testPlayer2.gameboard.placeShip("Carrier", 1, 1, "y");
   describe("Attack method", () => {
     it("Should register successful attacks", () => {
       expect(testPlayer1.attack(testPlayer2, 1, 3)).toBe(true);
