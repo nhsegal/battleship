@@ -19,7 +19,9 @@
   "homepage": "https://github.com/nhsegal/battleship#readme",
   "devDependencies": {
     "eslint": "^8.26.0",
-    "jest": "^29.2.2"
+    "jest": "^29.2.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "browserslist": [
     "defaults and supports es6-module",
