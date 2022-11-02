@@ -1,9 +1,12 @@
+body{
+  display: grid;
 
-#border{
+}
+.border{
  background-color: black;
  width: 320px;
 }
-#gameboard{
+.gameboard{
   background: rgb(60,60,60);
   display: grid;
   grid-template-columns: repeat(10, 30px);
@@ -11,7 +14,15 @@
   gap: 2px;
   border: 1px solid black;
 }
-#gameboard > div {
+.gameboard > div {
   background-color:  rgb(160,160,160);
   padding: 10px;
+}
+#top{
+  text-align: center;
+}
+#middle{
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr
 }
