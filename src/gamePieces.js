@@ -1,5 +1,3 @@
-const { ContextReplacementPlugin } = require("webpack");
-
 const Ship = (len, name = null, xi = null, yi = null, _axis = null) => {
   let _hitNumber = 0;
   const x = xi;
@@ -147,6 +145,7 @@ const Player = (_name = null) => {
     }
     return opponent.gameboard.receiveAttack(x, y);
   };
+
   const randomlyPlaceShips = () => {
     gameboard.fleet.forEach((ship, index, arr) => {
       let orientation = Math.random();
@@ -189,9 +188,8 @@ const Player = (_name = null) => {
           );
         }
       }
-  
 
-      computer.gameboard.placeShip(ship.name, xpos, ypos, axis);
+      gameboard.placeShip(ship.name, xpos, ypos, axis);
     })
   }
   return {
@@ -215,11 +213,22 @@ computer.randomAttack = function (enemy) {
     x = Math.floor(Math.random() * enemy.gameboard.boardLength);
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
-  computer.attack(enemy, x, y);
+  //  Returns true if success
+  return computer.attack(enemy, x, y);
 }
 
-//  Second computer opponent for testing
-let computer2 = Player("Computer 2");
+// Remove this after testing
+human.randomAttack = function (enemy) {
+  let x = Math.floor(Math.random() * enemy.gameboard.boardLength);
+  let y = Math.floor(Math.random() * enemy.gameboard.boardLength);
+  while (
+    enemy.gameboard.shotRecord.filter((e) => e.x === x && e.y === y).length != 0
+  ) {
+    x = Math.floor(Math.random() * enemy.gameboard.boardLength);
+    y = Math.floor(Math.random() * enemy.gameboard.boardLength);
+  }
+  return human.attack(enemy, x, y);
+}
 
 
 // isBlocked() helps computer place its ships
@@ -249,9 +258,10 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 
 
 computer.randomlyPlaceShips();
-//console.log(computer.gameboard.fleet)
+human.randomlyPlaceShips();
 
-module.exports = {
+
+export {
   Ship,
   Gameboard,
   Player,
