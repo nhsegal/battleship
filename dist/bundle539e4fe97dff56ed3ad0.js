@@ -21,7 +21,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#border{\n background-color: black;\n width: 320px;\n}\n#gameboard{\n  background: rgb(60,60,60);\n  display: grid;\n  grid-template-columns: repeat(10, 30px);\n  grid-template-rows: repeat(10, 30px);;\n  gap: 2px;\n  border: 1px solid black;\n}\n#gameboard > div {\n  background-color:  rgb(160,160,160);\n  padding: 10px;\n}", "",{"version":3,"sources":["webpack://./src/styles.css"],"names":[],"mappings":";AACA;CACC,uBAAuB;CACvB,YAAY;AACb;AACA;EACE,yBAAyB;EACzB,aAAa;EACb,uCAAuC;EACvC,oCAAoC;EACpC,QAAQ;EACR,uBAAuB;AACzB;AACA;EACE,mCAAmC;EACnC,aAAa;AACf","sourcesContent":["\n#border{\n background-color: black;\n width: 320px;\n}\n#gameboard{\n  background: rgb(60,60,60);\n  display: grid;\n  grid-template-columns: repeat(10, 30px);\n  grid-template-rows: repeat(10, 30px);;\n  gap: 2px;\n  border: 1px solid black;\n}\n#gameboard > div {\n  background-color:  rgb(160,160,160);\n  padding: 10px;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "body{\n  display: grid;\n\n}\n.border{\n background-color: black;\n width: 320px;\n}\n.gameboard{\n  background: rgb(60,60,60);\n  display: grid;\n  grid-template-columns: repeat(10, 30px);\n  grid-template-rows: repeat(10, 30px);;\n  gap: 2px;\n  border: 1px solid black;\n}\n.gameboard > div {\n  background-color:  rgb(160,160,160);\n  padding: 10px;\n}\n#top{\n  text-align: center;\n}\n#middle{\n  display: grid;\n  justify-items: center;\n  grid-template-columns: 1fr 1fr\n}", "",{"version":3,"sources":["webpack://./src/styles.css"],"names":[],"mappings":"AAAA;EACE,aAAa;;AAEf;AACA;CACC,uBAAuB;CACvB,YAAY;AACb;AACA;EACE,yBAAyB;EACzB,aAAa;EACb,uCAAuC;EACvC,oCAAoC;EACpC,QAAQ;EACR,uBAAuB;AACzB;AACA;EACE,mCAAmC;EACnC,aAAa;AACf;AACA;EACE,kBAAkB;AACpB;AACA;EACE,aAAa;EACb,qBAAqB;EACrB;AACF","sourcesContent":["body{\n  display: grid;\n\n}\n.border{\n background-color: black;\n width: 320px;\n}\n.gameboard{\n  background: rgb(60,60,60);\n  display: grid;\n  grid-template-columns: repeat(10, 30px);\n  grid-template-rows: repeat(10, 30px);;\n  gap: 2px;\n  border: 1px solid black;\n}\n.gameboard > div {\n  background-color:  rgb(160,160,160);\n  padding: 10px;\n}\n#top{\n  text-align: center;\n}\n#middle{\n  display: grid;\n  justify-items: center;\n  grid-template-columns: 1fr 1fr\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -614,17 +614,25 @@ __webpack_require__.r(__webpack_exports__);
 //import game from './gamePlay';
 
 
-playerGameboard = document.getElementById('playerGameboard');
+const playerGB = document.getElementById('playerGB');
+const cpuGB = document.getElementById('cpuGB');
 
-const makePlayerGameboard = function (){
+const makeGameboard = function (someDiv){
   for (let i = 0; i<100; i++){
     let cell = document.createElement("div");
-    playerGameboard.append(cell);
+    cell.id = someDiv.id+i;
+    cell.addEventListener("click", function(){
+      console.log(`cell ${cell.id} attacked`);
+      cell.innerHTML = '•';
+    }, { once: true});
+    someDiv.append(cell);
   }
 }
-playerGameboard()
+
+makeGameboard(playerGB);
+makeGameboard(cpuGB);
 })();
 
 /******/ })()
 ;
-//# sourceMappingURL=bundlef8f94d38cf515fb89b32.js.map
+//# sourceMappingURL=bundle539e4fe97dff56ed3ad0.js.map

@@ -16,6 +16,7 @@ const playGame = function () {
       }
       if (computer.gameboard.allSunk()) {
         console.log("You won!");
+        return turn;
       }
     } else {
       console.log("You missed!");
@@ -34,6 +35,7 @@ const playGame = function () {
       }
       if (human.gameboard.allSunk()) {
         console.log("You lost!");
+        return turn;
       }
     } else {
       console.log("They missed!");
@@ -58,5 +60,9 @@ const countSunkShips = function (player) {
   )
   return { count, list };
 };
+
+const attackThroughConsole = function (player){
+
+}
 
 playGame();

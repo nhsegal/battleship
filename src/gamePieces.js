@@ -10,7 +10,6 @@ const Ship = (len, name = null, xi = null, yi = null, _axis = null) => {
   };
   const isSunk = () => {
     if (_hitNumber >= length) {
-     // console.log(`${name} is sunk!`)
       return true;
     }
     return false;
@@ -169,7 +168,7 @@ const Player = (_name = null) => {
         );
       }
       
-      // If it clashes with a placed ship repick
+      // If it clashes with a placed ship repick by recursion
       while (
         isBlocked(ship, axis, xpos, ypos, gameboard.occupiedSquares)
       ) {
@@ -188,10 +187,10 @@ const Player = (_name = null) => {
           );
         }
       }
-
       gameboard.placeShip(ship.name, xpos, ypos, axis);
     })
   }
+
   return {
     name,
     gameboard,
@@ -259,6 +258,20 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 
 computer.randomlyPlaceShips();
 human.randomlyPlaceShips();
+
+// *****  For testing only, set computer ship positions:
+for (let i =0; i< computer.gameboard.fleet.length; i++){
+  computer.gameboard.fleet[i].x = 0
+  computer.gameboard.fleet[i].y = i;
+  computer.gameboard.fleet[i].orientation= 'x';
+}
+/*
+for (let i =0; i< computer.gameboard.fleet.length; i++){
+  let ship = computer.gameboard.fleet[i];
+  computer.gameboard.placeShip(ship.name, 0, i, 'x');
+}
+*/
+
 
 
 export {
