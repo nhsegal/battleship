@@ -213,7 +213,11 @@ computer.randomAttack = function (enemy) {
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
   //  Returns true if success
-  return computer.attack(enemy, x, y);
+  return {
+    success: computer.attack(enemy, x, y),
+    x: x,
+    y: y,
+  }
 }
 
 // Remove this after testing
@@ -226,7 +230,11 @@ human.randomAttack = function (enemy) {
     x = Math.floor(Math.random() * enemy.gameboard.boardLength);
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
-  return human.attack(enemy, x, y);
+  return {
+    success: human.attack(enemy, x, y),
+    x: x,
+    y: y
+  }
 }
 
 
