@@ -260,10 +260,11 @@ computer.randomlyPlaceShips();
 human.randomlyPlaceShips();
 
 // *****  For testing only, set computer ship positions:
+/*
 for (let i =0; i< computer.gameboard.fleet.length; i++){
   computer.gameboard.fleet[i].x = 0
   computer.gameboard.fleet[i].y = i;
-  computer.gameboard.fleet[i].orientation= 'x';
+  computer.gameboard.fleet[i].axis= 'x';
 }
 /*
 for (let i =0; i< computer.gameboard.fleet.length; i++){

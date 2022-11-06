@@ -23,10 +23,9 @@ const displayAttack = function(e){
   console.log(`cell ${e.target.id} attacked`);
   let y = parseInt(e.target.id.slice(-2)) % 10;
   let x = Math.floor(parseInt(e.target.id.slice(-2))/10);
-  console.log(x, y);
-  console.log(computer.gameboard.fleet)
+  //console.log(x, y);
   let hit = computer.gameboard.fleet.filter(ship => 
-    x == ship.x && y == ship.y);
+    ship.x === String(x) && ship.y === String(y));
   console.log(hit);
   if (hit.length > 0){
     e.target.style.color = 'red';
@@ -39,3 +38,24 @@ const displayAttack = function(e){
 
 makeGameboard(playerGB);
 makeGameboard(cpuGB);
+
+const revealCpuShips = () => { 
+  for (const ship of computer.gameboard.fleet){
+    let loc = null;
+    for (let i = 0; i<ship.length; i++){
+      let x = ship.x;
+      let y = ship.y;
+      if (ship.axis === 'x'){
+        x = x + i
+      } else {
+        y = y + i;
+      }
+      loc = `cpuGB`+ x + y;
+      let element = document.getElementById(`${loc}`)
+      element.style.color = 'red';
+      element.innerHTML  = '&#8226';
+    }
+  }
+}
+
+revealCpuShips();
