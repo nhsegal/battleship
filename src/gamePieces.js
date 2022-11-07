@@ -237,7 +237,6 @@ human.randomAttack = function (enemy) {
   }
 }
 
-
 // isBlocked() helps computer place its ships
 function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   let coOrdinatesToTest = [];
@@ -262,26 +261,8 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   return false;
 }
 
-
-
 computer.randomlyPlaceShips();
 human.randomlyPlaceShips();
-
-// *****  For testing only, set computer ship positions:
-/*
-for (let i =0; i< computer.gameboard.fleet.length; i++){
-  computer.gameboard.fleet[i].x = 0
-  computer.gameboard.fleet[i].y = i;
-  computer.gameboard.fleet[i].axis= 'x';
-}
-/*
-for (let i =0; i< computer.gameboard.fleet.length; i++){
-  let ship = computer.gameboard.fleet[i];
-  computer.gameboard.placeShip(ship.name, 0, i, 'x');
-}
-*/
-
-
 
 export {
   Ship,

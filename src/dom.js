@@ -1,9 +1,7 @@
-import { mouseAttack } from "./gamePlay";
-
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
 
-const makeGameboard = (someDiv) => {
+const makeGameboard = (someDiv, callback) => {
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
     let idNum = i;
@@ -12,9 +10,19 @@ const makeGameboard = (someDiv) => {
     }
     cell.id = someDiv.id + idNum;
     cell.textContent = idNum;
-    cell.addEventListener("click", mouseAttack, { once: true });
+    cell.addEventListener("click", 
+    callback, 
+      { once: true }
+    );
     someDiv.append(cell);
   }
+}
+
+
+const mouseAttack = function (e) {
+  let yloc = parseInt(e.target.id.slice(-2)) % 10;
+  let xloc = Math.floor(parseInt(e.target.id.slice(-2)) / 10);
+  displayAttack(human, xloc, yloc, human.attack(computer, xloc, yloc));
 };
 
 const displayAttack = (player, x, y, success) => {
@@ -35,6 +43,4 @@ const displayAttack = (player, x, y, success) => {
   element.innerHTML = "&#8226";
 }
 
-
-
-export { makeGameboard, playerGB, cpuGB, displayAttack }
+export { makeGameboard, displayAttack, playerGB, cpuGB }
