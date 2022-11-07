@@ -29,7 +29,6 @@ let gameOver = false;
 //if gameend
 // announce result, allow for newgame/reset
 
-console.log(playerGB)
 
 const playerTurn = function (e) {
   console.log("ASDfasfas")
@@ -56,9 +55,9 @@ const playerTurn = function (e) {
   }
   else {
     console.log("You missed!");
-    displayAttack('human', attack.x, attack.y, false)
+    displayAttack('human', attack.x, attack.y, false);
   }
-  computerTurn();
+  //computerTurn();
 }
 
 const computerTurn = function(){
@@ -98,5 +97,6 @@ const countSunkShips = function (player) {
 };
 
 
+let test = function() {console.log('hdsafasdasdf')}
 makeGameboard(playerGB, playerTurn);
-makeGameboard(cpuGB, computerTurn);
+makeGameboard(cpuGB, test);
