@@ -1,8 +1,9 @@
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
 const hitOrMiss = document.getElementById("hit-or-miss");
-const announcements = document.getElementById("announcements")
-console.log(announcements)
+const announcements = document.getElementById("announcements");
+const endGameMsg = document.querySelector('[data-end-game-message]');
+const endGameScreen = document.getElementById("end-game-message");
 
 const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
@@ -17,7 +18,7 @@ const makeGameboard = (someDiv, callback = null) => {
     cell.id = someDiv.id + idNum;
     if (callback){
       cell.addEventListener("click", 
-      callback//,  { once: true }
+      callback
       );
     }
     someDiv.append(cell);
@@ -41,4 +42,4 @@ const displayAttack = (player, x, y, success) => {
   }
 }
 
-export { makeGameboard, displayAttack, playerGB, cpuGB, hitOrMiss, announcements }
+export { makeGameboard, displayAttack, playerGB, cpuGB, hitOrMiss, announcements, endGameMsg, endGameScreen }

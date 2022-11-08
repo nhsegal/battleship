@@ -1,6 +1,15 @@
 import "./styles.css";
 import { computer, human } from "./gamePieces.js";
-import { makeGameboard, displayAttack, playerGB, cpuGB, hitOrMiss, announcements} from "./dom";
+import { 
+  makeGameboard, 
+  displayAttack, 
+  playerGB, 
+  cpuGB, 
+  hitOrMiss, 
+  announcements,
+  endGameMsg,
+  endGameScreen
+} from "./dom";
 
 
 const revealPlayerShips = () => {
@@ -56,7 +65,8 @@ const playerTurn = function (e) {
         announcements.textContent = `You sunk a ${newlySunk}!`;
     }
     if (computer.gameboard.allSunk()) {
-      console.log("You won!");
+      endGameMsg.textContent = "You won!";
+      endGameScreen.classList.add('show');
       gameOver = true;
       return
     }
@@ -66,7 +76,6 @@ const playerTurn = function (e) {
     displayAttack('human', attack.x, attack.y, false);
   }
   setTimeout(computerTurn, 1000);
-  //computerTurn();
 }
 
 const computerTurn = function(){
@@ -83,7 +92,8 @@ const computerTurn = function(){
         announcements.textContent = `They sunk your ${newlySunk}!`;
     }
     if (human.gameboard.allSunk()) {
-      console.log("You lost!");
+      endGameMsg.textContent = "You lost!";
+      endGameScreen.classList.add('show');
       gameOver = true;
       return;
     }
