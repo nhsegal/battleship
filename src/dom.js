@@ -1,7 +1,7 @@
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
 
-const makeGameboard = (someDiv, callback) => {
+const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
     let idNum = i;
@@ -10,10 +10,12 @@ const makeGameboard = (someDiv, callback) => {
     }
     cell.id = someDiv.id + idNum;
     cell.textContent = idNum;
-    cell.addEventListener("click", 
-    callback, 
-      { once: true }
-    );
+    if (callback){
+      cell.addEventListener("click", 
+      callback, 
+        { once: true }
+      );
+    }
     someDiv.append(cell);
   }
 }
@@ -33,6 +35,7 @@ const displayAttack = (player, x, y, success) => {
   if (player === 'human') {
     loc = `cpuGB` + x + y;
   }
+  console.log(loc)
   let element = document.getElementById(`${loc}`);
   console.log(element)
   if (success) {

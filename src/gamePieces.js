@@ -142,7 +142,11 @@ const Player = (_name = null) => {
     ) {
       throw new Error("Attack redundant");
     }
-    return opponent.gameboard.receiveAttack(x, y);
+    return (
+      {success: opponent.gameboard.receiveAttack(x, y),
+        x,
+        y     
+    })
   };
 
   const randomlyPlaceShips = () => {
