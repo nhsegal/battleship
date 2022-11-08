@@ -138,15 +138,12 @@ const Player = (_name = null) => {
       throw new Error("Attack out of bounds");
     }
     if (
-      opponent.gameboard.shotRecord.filter((e) => e.x === x && e.y === y).length != 0
+      opponent.gameboard.shotRecord.filter((e) => e.x === x && e.y === y)
+        .length != 0
     ) {
       throw new Error("Attack redundant");
     }
-    return (
-      {success: opponent.gameboard.receiveAttack(x, y),
-        x,
-        y     
-    })
+    return { success: opponent.gameboard.receiveAttack(x, y), x, y };
   };
 
   const randomlyPlaceShips = () => {
@@ -162,20 +159,16 @@ const Player = (_name = null) => {
           Math.random() * (gameboard.boardLength - ship.length)
         );
         ypos = Math.floor(Math.random() * gameboard.boardLength);
-      } 
-    
-     else {
+      } else {
         axis = "y";
         xpos = Math.floor(Math.random() * gameboard.boardLength);
         ypos = Math.floor(
           Math.random() * (gameboard.boardLength - ship.length)
         );
       }
-      
+
       // If it clashes with a placed ship repick by recursion
-      while (
-        isBlocked(ship, axis, xpos, ypos, gameboard.occupiedSquares)
-      ) {
+      while (isBlocked(ship, axis, xpos, ypos, gameboard.occupiedSquares)) {
         orientation = Math.random();
         if (orientation > 0.5) {
           axis = "x";
@@ -192,14 +185,14 @@ const Player = (_name = null) => {
         }
       }
       gameboard.placeShip(ship.name, xpos, ypos, axis);
-    })
-  }
+    });
+  };
 
   return {
     name,
     gameboard,
     attack,
-    randomlyPlaceShips
+    randomlyPlaceShips,
   };
 };
 
@@ -217,12 +210,9 @@ computer.randomAttack = function (enemy) {
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
   //  Returns true if success
-  return {
-    success: computer.attack(enemy, x, y),
-    x: x,
-    y: y,
-  }
-}
+  return computer.attack(enemy, x, y)
+  
+};
 
 // Remove this after testing
 human.randomAttack = function (enemy) {
@@ -234,12 +224,8 @@ human.randomAttack = function (enemy) {
     x = Math.floor(Math.random() * enemy.gameboard.boardLength);
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
-  return {
-    success: human.attack(enemy, x, y),
-    x: x,
-    y: y
-  }
-}
+  return human.attack(enemy, x, y)
+};
 
 // isBlocked() helps computer place its ships
 function isBlocked(ship, axis, xpos, ypos, occSqArr) {
@@ -268,10 +254,4 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 computer.randomlyPlaceShips();
 human.randomlyPlaceShips();
 
-export {
-  Ship,
-  Gameboard,
-  Player,
-  computer,
-  human
-};
+export { Ship, Gameboard, Player, computer, human };

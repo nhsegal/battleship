@@ -31,17 +31,13 @@ let gameOver = false;
 
 
 const playerTurn = function (e) {
-  console.log(e.target)
-  console.log("ASDfasfas")
   if (gameOver) return;
   let y = parseInt(e.target.id.slice(-2)) % 10;
   let x = Math.floor(parseInt(e.target.id.slice(-2)) / 10);
   let before = countSunkShips(computer);
   let attack = human.attack(computer, x, y);
-  console.log(attack)
   if (attack.success) {
     console.log("You hit the enemy!");
-    console.log(attack.x , attack.y )
     displayAttack('human', attack.x, attack.y, true)
     let after = countSunkShips(computer);
     if (after.count > before.count) {
@@ -58,10 +54,9 @@ const playerTurn = function (e) {
   }
   else {
     console.log("You missed!");
-    console.log(attack.x , attack.y )
     displayAttack('human', attack.x, attack.y, false);
   }
-  //computerTurn();
+  computerTurn();
 }
 
 const computerTurn = function(){
@@ -100,7 +95,6 @@ const countSunkShips = function (player) {
   return { count, list };
 };
 
-console.log(playerGB)
 
 let test = function() {console.log('hdsafasdasdf')}
 makeGameboard(cpuGB, playerTurn);

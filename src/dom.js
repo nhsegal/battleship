@@ -35,9 +35,7 @@ const displayAttack = (player, x, y, success) => {
   if (player === 'human') {
     loc = `cpuGB` + x + y;
   }
-  console.log(loc)
   let element = document.getElementById(`${loc}`);
-  console.log(element)
   if (success) {
     element.style.color = "red";
   }
