@@ -214,19 +214,6 @@ computer.randomAttack = function (enemy) {
   
 };
 
-// Remove this after testing
-human.randomAttack = function (enemy) {
-  let x = Math.floor(Math.random() * enemy.gameboard.boardLength);
-  let y = Math.floor(Math.random() * enemy.gameboard.boardLength);
-  while (
-    enemy.gameboard.shotRecord.filter((e) => e.x === x && e.y === y).length != 0
-  ) {
-    x = Math.floor(Math.random() * enemy.gameboard.boardLength);
-    y = Math.floor(Math.random() * enemy.gameboard.boardLength);
-  }
-  return human.attack(enemy, x, y)
-};
-
 // isBlocked() helps computer place its ships
 function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   let coOrdinatesToTest = [];

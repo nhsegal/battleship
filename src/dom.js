@@ -1,5 +1,8 @@
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
+const hitOrMiss = document.getElementById("hit-or-miss");
+const announcements = document.getElementById("announcements")
+console.log(announcements)
 
 const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
@@ -12,11 +15,9 @@ const makeGameboard = (someDiv, callback = null) => {
     cell.classList.add("cell");
     cell.setAttribute("data-cell", ""); 
     cell.id = someDiv.id + idNum;
-    cell.textContent = idNum;
     if (callback){
       cell.addEventListener("click", 
-      callback, 
-        { once: true }
+      callback//,  { once: true }
       );
     }
     someDiv.append(cell);
@@ -40,4 +41,4 @@ const displayAttack = (player, x, y, success) => {
   }
 }
 
-export { makeGameboard, displayAttack, playerGB, cpuGB }
+export { makeGameboard, displayAttack, playerGB, cpuGB, hitOrMiss, announcements }
