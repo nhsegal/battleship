@@ -1,35 +1,103 @@
+*, *::after, *::before {
+  box-sizing: border-box;
+}
+
+:root {
+  --cell-size: 30px;
+  --mark-size: calc(var(--cell-size)*.4);
+}
+
 body{
-  display: grid;
+  margin: 0;
 }
+
+h1{
+  margin: 1rem;
+}
+
 .border{
- background-color: black;
- width: 320px;
+ width: 100vw;
+ height: 100vh;
 }
+
 .gameboard{
-  background: rgb(60,60,60);
   display: grid;
   grid-template-columns: repeat(10, 30px);
   grid-template-rows: repeat(10, 30px);;
-  gap: 2px;
   border: 1px solid black; 
 }
 
+
 #top{
   text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
+
 #middle{
   display: grid;
   justify-items: center;
-  grid-template-columns: 1fr 1fr
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-content: center;
 }
 
-.gameboard > div{
-  background-color:  rgb(160,160,160);
+#player-board-title, #cpu-board-title{
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.cell{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color:  rgb(180,180,180);
   font-size: 15px;
   padding: 0;
   font-family: Courier, monospace;
   text-align: center;
   color: white;
+  border: .5px solid rgb(100,100,100);
+  position: relative;
+  cursor: pointer;
+}
 
+.cell.hit, .cell.miss, #playerGB>.cell {
+  cursor: not-allowed;
+}
 
+.cell.hit::before {
+  content: '';
+  position: absolute;
+  width: calc(var(--mark-size));
+  height: calc(var(--mark-size));
+  background-color: rgb(50,50,50);
+  border-radius: 50%;
+}
+.cell.hit::after {
+  content: '';
+  position: absolute;
+  width: calc(var(--mark-size)*.93);
+  height: calc(var(--mark-size)*.93);
+  background-color: red;
+  border-radius: 50%;
+}
+
+.cell.miss::before {
+  content: '';
+  position: absolute;
+  width: calc(var(--mark-size));
+  height: calc(var(--mark-size));
+  background-color: rgb(50,50,50);
+  border-radius: 50%;
+}
+.cell.miss::after {
+  content: '';
+  position: absolute;
+  width: calc(var(--mark-size)*.93);
+  height: calc(var(--mark-size)*.93);
+  background-color: white;
+  border-radius: 50%;
 }

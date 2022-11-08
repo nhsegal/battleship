@@ -4,10 +4,13 @@ const cpuGB = document.getElementById("cpuGB");
 const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
+    cell.at
     let idNum = i;
     if (i < 10) {
       idNum = "0" + String(idNum);
     }
+    cell.classList.add("cell");
+    cell.setAttribute("data-cell", ""); 
     cell.id = someDiv.id + idNum;
     cell.textContent = idNum;
     if (callback){
@@ -20,13 +23,6 @@ const makeGameboard = (someDiv, callback = null) => {
   }
 }
 
-
-const mouseAttack = function (e) {
-  let yloc = parseInt(e.target.id.slice(-2)) % 10;
-  let xloc = Math.floor(parseInt(e.target.id.slice(-2)) / 10);
-  displayAttack(human, xloc, yloc, human.attack(computer, xloc, yloc));
-};
-
 const displayAttack = (player, x, y, success) => {
   let loc = null;
   if (player === 'computer') {
@@ -37,12 +33,11 @@ const displayAttack = (player, x, y, success) => {
   }
   let element = document.getElementById(`${loc}`);
   if (success) {
-    element.style.color = "red";
+    element.classList.add("hit");
   }
   else {
-    element.style.color = "blue";
+    element.classList.add("miss");
   }
-  element.innerHTML = "&#8226";
 }
 
 export { makeGameboard, displayAttack, playerGB, cpuGB }

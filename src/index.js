@@ -96,6 +96,5 @@ const countSunkShips = function (player) {
 };
 
 
-let test = function() {console.log('hdsafasdasdf')}
 makeGameboard(cpuGB, playerTurn);
 makeGameboard(playerGB);
