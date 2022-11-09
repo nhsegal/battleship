@@ -7,7 +7,6 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <link rel="stylesheet" href="styles.css" />
     <script src="index.js" defer></script>
-   
   </head>
   <body>
     <div id="top">
@@ -15,28 +14,30 @@
     </div>
 
     <div id="middle">
-
       <div class="board-container" data-board-container>
         <div id="player-board-title">Your Board</div>
         <div id="playerGB" class="gameboard"></div>
       </div>
 
-      <div id = "center">
-        <div id="hit-or-miss"> </div>
-        <div id="announcements"> </div>
+      <div id="center">
+        <div id="hit-or-miss"></div>
+        <div id="announcements"></div>
       </div>
-    
-  
+
       <div class="board-container" data-board-container>
         <div id="cpu-board-title">Enemy Board</div>
         <div id="cpuGB" class="gameboard"></div>
       </div>
-    
     </div>
-    <div class = "end-game-message" id="end-game-message">
-      <div data-end-game-message> Test  </div>
+
+    <div id="bottom">
+      <div id="fleet">
+      </div>
+    </div>
+    <div class="end-game-message" id="end-game-message">
+      <div data-end-game-message>Test</div>
       <button id="restart-button">Play Again</button>
     </div>
-    
   </body>
 </html>
+

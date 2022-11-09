@@ -64,7 +64,6 @@ h1{
   font-size: 2rem;
 }
 
-
 .cell{
   display: flex;
   justify-content: center;
@@ -153,3 +152,25 @@ h1{
   padding: 10px 20px;
 }
 
+#fleet {
+  padding-top: 3rem;
+  padding-left: 6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  width: 40vw;
+}
+
+#fleet>div {
+  padding-bottom: 1rem;
+}
+
+.ship {
+  display: flex;
+}
+.ship>div {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background-color: rgb(150, 150, 150);
+  border: .5px solid rgb(100,100,100);
+}

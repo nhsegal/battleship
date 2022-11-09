@@ -1,9 +1,13 @@
+import { Fleet } from "./gamePieces"
+
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
 const hitOrMiss = document.getElementById("hit-or-miss");
 const announcements = document.getElementById("announcements");
 const endGameMsg = document.querySelector('[data-end-game-message]');
 const endGameScreen = document.getElementById("end-game-message");
+const preGameFleet = document.getElementById("fleet");
+
 
 const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
@@ -25,6 +29,22 @@ const makeGameboard = (someDiv, callback = null) => {
   }
 }
 
+const makeFleet = (someDiv, callback = null) => {
+  let fleetToPlace = Fleet();
+  fleetToPlace.forEach(ship => {
+    const shipNameDiv = document.createElement('div');
+    shipNameDiv.textContent = ship.name;
+    shipNameDiv.setAttribute("data-name", `${ship.name}`);
+    const shipBodyDiv = document.createElement('div');
+    shipBodyDiv.draggable = true;
+    shipBodyDiv.classList.add('ship')
+    for (let i =0; i< ship.length; i++){
+      shipBodyDiv.append(document.createElement('div')) 
+    } 
+    someDiv.append(shipNameDiv, shipBodyDiv)
+  });
+}
+
 const displayAttack = (player, x, y, success) => {
   let loc = null;
   if (player === 'computer') {
@@ -42,4 +62,15 @@ const displayAttack = (player, x, y, success) => {
   }
 }
 
-export { makeGameboard, displayAttack, playerGB, cpuGB, hitOrMiss, announcements, endGameMsg, endGameScreen }
+export { 
+  makeGameboard, 
+  displayAttack, 
+  playerGB, 
+  cpuGB, 
+  hitOrMiss, 
+  announcements, 
+  endGameMsg, 
+  endGameScreen, 
+  makeFleet,
+  preGameFleet
+}

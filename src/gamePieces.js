@@ -241,4 +241,4 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 computer.randomlyPlaceShips();
 human.randomlyPlaceShips();
 
-export { Ship, Gameboard, Player, computer, human };
+export { Ship, Fleet, Gameboard, Player, computer, human };
