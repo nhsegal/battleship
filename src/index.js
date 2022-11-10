@@ -1,13 +1,8 @@
 import "./styles.css";
-import { human } from "./gamePieces.js";
+import { computer, human } from "./gamePieces.js";
 import { 
-  makeGameboard, 
-  announcements,
-  endGameMsg,
-  endGameScreen,
-  makeFleet,
-  preGameFleet
-} from "./dom";
+  game
+} from "./gamePlay.js";
 
 const revealPlayerShips = () => {
   for (const ship of human.gameboard.fleet) {
@@ -28,15 +23,10 @@ const revealPlayerShips = () => {
   }
 };
 
-let gameOver = false;
-let boardLocked = false;
-
+game()
 // Need to code reset
 
 
-
-
-makeGameboard(playerGB);
-revealPlayerShips();
-makeFleet(preGameFleet)
+//revealPlayerShips();
+//makeFleet(preGameFleet)
 
