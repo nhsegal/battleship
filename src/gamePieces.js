@@ -1,4 +1,4 @@
-const Ship = (len, name = null, xi = null, yi = null, _axis = null) => {
+const Ship = (len, name = null, xi = null, yi = null, _axis = 'x') => {
   let _hitNumber = 0;
   const x = xi;
   const y = yi;
@@ -239,6 +239,6 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 }
 
 computer.randomlyPlaceShips();
-human.randomlyPlaceShips();
+//human.randomlyPlaceShips();
 
 export { Ship, Fleet, Gameboard, Player, computer, human };

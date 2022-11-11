@@ -35,9 +35,9 @@ h1{
 }
 
 #middle{
-  display: grid;
+  display: flex;
   justify-items: center;
-  grid-template-columns: 40vw 10vw 40vw;
+  gap: 2rem;
   justify-content: center;
   align-content: center;
 }

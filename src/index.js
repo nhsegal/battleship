@@ -1,9 +1,15 @@
-import "./styles.css";
-import { computer, human } from "./gamePieces.js";
-import { 
-  game
-} from "./gamePlay.js";
+//import css from "./styles.css";
+import { humanPlaceShips } from "./humanPlaceShips.js";
+import { game } from "./gamePlay.js";
 
+humanPlaceShips()
+
+//game()
+
+
+
+
+/*
 const revealPlayerShips = () => {
   for (const ship of human.gameboard.fleet) {
     let loc = null;
@@ -22,11 +28,7 @@ const revealPlayerShips = () => {
     }
   }
 };
-
-game()
-// Need to code reset
-
-
+*/
 //revealPlayerShips();
 //makeFleet(preGameFleet)
 

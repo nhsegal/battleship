@@ -1,7 +1,8 @@
-import { Fleet } from "./gamePieces"
+import { Fleet } from "./gamePieces.js"
 
 const playerGB = document.getElementById("playerGB");
 const cpuGB = document.getElementById("cpuGB");
+const cpuGBcontainer = document.getElementById("cpuGBcontainer");
 const hitOrMiss = document.getElementById("hit-or-miss");
 const announcements = document.getElementById("announcements");
 const endGameMsg = document.querySelector('[data-end-game-message]');
@@ -10,6 +11,7 @@ const preGameFleet = document.getElementById("fleet");
 
 
 const makeGameboard = (someDiv, callback = null) => {
+  console.log('here')
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
     cell.at
@@ -27,6 +29,14 @@ const makeGameboard = (someDiv, callback = null) => {
     }
     someDiv.append(cell);
   }
+}
+
+const addClickCallbackToGameboard = (gameBoardDiv, func) =>{
+  console.log(gameBoardDiv.id)
+  const cells = [...gameBoardDiv.querySelectorAll(`#${gameBoardDiv.id }> .cell`)]
+  console.log(cells[102])
+  cells.forEach( cell => {
+    cell.addEventListener('click', func)})
 }
 
 const makeFleet = (someDiv, callback = null) => {
@@ -72,5 +82,7 @@ export {
   endGameMsg, 
   endGameScreen, 
   makeFleet,
-  preGameFleet
+  preGameFleet,
+  cpuGBcontainer,
+  addClickCallbackToGameboard
 }

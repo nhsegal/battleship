@@ -10,7 +10,8 @@ import {
   endGameScreen, 
   makeFleet,
   preGameFleet
-} from "./dom";
+} from "./dom.js";
+import { humanPlaceShips } from "./humanPlaceShips.js";
 
 
 const revealPlayerShips = () => {
