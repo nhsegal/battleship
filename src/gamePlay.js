@@ -28,6 +28,7 @@ const revealPlayerShips = () => {
       loc = `playerGB` + x + y;
       let element = document.getElementById(`${loc}`);
       element.classList.add("hasShip");
+      element.setAttribute("data-name", `${ship.name}`);
     }
   }
 };
@@ -35,6 +36,7 @@ const revealPlayerShips = () => {
 const game = () => {
   let gameOver = false;
   let boardLocked = false;
+  
 
   const playerTurn = function (e) {
     if (gameOver) return;
@@ -113,6 +115,7 @@ const game = () => {
 
   makeGameboard(playerGB);
   makeGameboard(cpuGB, playerTurn);
+  revealPlayerShips();
 
 };
 
