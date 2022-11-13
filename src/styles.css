@@ -152,19 +152,6 @@ h1{
   padding: 10px 20px;
 }
 
-#fleet {
-  padding-top: 3rem;
-  padding-left: 6rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
-  width: 40vw;
-}
-
-#fleet>div {
-  padding-bottom: 1rem;
-}
-
 .ship {
   display: flex;
 }
@@ -174,3 +161,39 @@ h1{
   background-color: rgb(150, 150, 150);
   border: .5px solid rgb(100,100,100);
 }
+
+.cell.hasShip.set {
+  background-color:  rgb(80,80,80);
+}
+
+.head::before {
+  content: '';
+  position: absolute;
+  width: calc(var(--mark-size));
+  height: calc(var(--mark-size));
+  background-color: rgb(240,240,150);
+  border-radius: 50%;
+}
+
+button {
+  margin: 1rem;
+  border: 1px solid #0066cc;
+  background-color: #0099cc;
+  color: #ffffff;
+  padding: 5px 10px;
+}
+
+button:hover {
+  border: 1px solid #0099cc;
+  background-color: #00aacc;
+  color: #ffffff;
+  padding: 5px 10px;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+

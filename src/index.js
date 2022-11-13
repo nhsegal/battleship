@@ -2,7 +2,7 @@
 import { humanPlaceShips } from "./humanPlaceShips.js";
 import { game } from "./gamePlay.js";
 
-humanPlaceShips()
+humanPlaceShips();
 
 //game()
 

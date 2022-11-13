@@ -48,9 +48,10 @@ const Gameboard = () => {
       throw new Error("Location out of bounds");
     }
     if (
-      (axis === "x" && xi > boardLength - 1 - ship.length) ||
-      (axis === "y" && yi > boardLength - 1 - ship.length)
+      (axis === "x" && xi > boardLength - ship.length) ||
+      (axis === "y" && yi > boardLength - ship.length)
     ) {
+      console.log(xi, yi)
       throw new Error("Ship partially out of bounds");
     }
 
@@ -77,8 +78,8 @@ const Gameboard = () => {
       }
     }
 
-    ship.x = xi;
-    ship.y = yi;
+    ship.x = parseInt(xi);
+    ship.y = parseInt(yi);
     ship.axis = axis;
     for (let i = 0; i < ship.length; i++) {
       if (axis === "x") {
@@ -198,6 +199,9 @@ const Player = (_name = null) => {
 
 let human = Player("You");
 let computer = Player("Computer");
+const testPlayer1 = Player('bob');
+const testPlayer2 = Player('alice');
+console.log(testPlayer1)
 
 // Give computer an attack strategy
 computer.randomAttack = function (enemy) {
@@ -241,4 +245,4 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 computer.randomlyPlaceShips();
 //human.randomlyPlaceShips();
 
-export { Ship, Fleet, Gameboard, Player, computer, human };
+export { Ship, Fleet, Gameboard, Player, computer, human, isBlocked };

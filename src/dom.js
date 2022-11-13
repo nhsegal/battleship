@@ -94,4 +94,5 @@ export {
   preGameFleet,
   cpuGBcontainer,
   addCallbackToGameboard,
+  removeCallbackFromGameboard
 };
