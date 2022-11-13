@@ -1,6 +1,4 @@
-import { Ship, Fleet, Gameboard, Player, computer, human, isBlocked } from "./gamePieces.js";
-//const gamePieces = require("./gamePieces");
-
+import { Ship, Fleet, Gameboard, Player, computer, isBlocked } from "./gamePieces.js";
 
 describe("Ship factory", () => {
   it("Should return an object with length, hitNumber", () => {
@@ -131,9 +129,8 @@ describe("Gameboard factory", () => {
     expect(testGameboard.allSunk()).toBe(true);
   });
 });
-/*
+
 describe("Player factory", () => {
-  console.log(typeof(Player))
   const testPlayer1 = Player('bob');
   const testPlayer2 = Player('alice');
  
@@ -141,10 +138,10 @@ describe("Player factory", () => {
     testPlayer1.gameboard.placeShip("Destroyer", 0, 0, "x");
     testPlayer2.gameboard.placeShip("Carrier", 1, 1, "y");
     it("Should register successful attacks", () => {
-      expect(testPlayer1.attack(testPlayer2, 1, 3)).toBe(true);
+      expect(testPlayer1.attack(testPlayer2, 1, 3)).toEqual({"success": true, "x": 1, "y": 3});
     });
     it("Should register unsucessful attacks", () => {
-      expect(testPlayer1.attack(testPlayer2, 2, 3)).toBe(false);
+      expect(testPlayer1.attack(testPlayer2, 2, 3)).toEqual({"success": false, "x": 2, "y": 3});
     });
     it("Should prevent redundant attacks", () => {
       expect(() => testPlayer1.attack(testPlayer2, 1, 3)).toThrow(
@@ -153,7 +150,7 @@ describe("Player factory", () => {
     });
   });
 });
-*/
+
 describe("Computer Player", () => {
   describe("Should always place its fleet legally", () => { 
     it ("Should place all ships", () => {
@@ -176,7 +173,6 @@ describe("Computer Player", () => {
 
     it("Should place each ship fully in bounds", () => {
       for (const ship of computer.gameboard.fleet) {
-        console.log(ship)
         if ((ship.axis === "x")) {
           expect(ship.x + ship.length < computer.gameboard.boardLength).toBe(true);
         }
@@ -205,3 +201,20 @@ describe("Computer Player", () => {
     });
   });
 });
+
+describe("isBlocked function", () => {
+  it("Should be false when ships don't overlap", () =>
+  {
+    let testPlayer = Player('testy');
+    testPlayer.gameboard.placeShip("Carrier", 1, 2, 'x');
+    let nextShip = Ship(3);
+    expect(isBlocked(nextShip, 'x', 3, 3, testPlayer.gameboard.occupiedSquares)).toBe(false)
+  });
+  it("Should be ship when ships do overlap", () =>{
+    let testPlayer = Player('testy');
+    testPlayer.gameboard.placeShip("Carrier", 1, 2, 'y');
+    let nextShip = Ship(3);
+    expect(isBlocked(nextShip, 'x', 3, 3, testPlayer.gameboard.occupiedSquares)).toBe(false)
+
+  })
+})
