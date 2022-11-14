@@ -10,7 +10,6 @@ const endGameScreen = document.getElementById("end-game-message");
 const preGameFleet = document.getElementById("fleet");
 
 const makeGameboard = (someDiv, callback = null) => {
-  console.log("here");
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
     let idNum = i;
@@ -30,14 +29,12 @@ const makeGameboard = (someDiv, callback = null) => {
 };
 
 const addCallbackToGameboard = (gameBoardDiv, func, type) => {
-
     const cells = [
       ...gameBoardDiv.querySelectorAll(`#${gameBoardDiv.id}> .cell`),
     ];
     cells.forEach((cell) => {
       cell.addEventListener(type, func);
     });
-  
 };
 
 const removeCallbackFromGameboard = (gameBoardDiv, func, type) => {

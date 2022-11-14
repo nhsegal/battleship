@@ -1,4 +1,4 @@
-const Ship = (len, name = null, xi = null, yi = null, _axis = 'x') => {
+const Ship = (len, name = null, xi = null, yi = null, _axis = "x") => {
   let _hitNumber = 0;
   const x = xi;
   const y = yi;
@@ -51,7 +51,6 @@ const Gameboard = () => {
       (axis === "x" && xi > boardLength - ship.length) ||
       (axis === "y" && yi > boardLength - ship.length)
     ) {
-      console.log(xi, yi)
       throw new Error("Ship partially out of bounds");
     }
 
@@ -81,15 +80,35 @@ const Gameboard = () => {
     ship.x = parseInt(xi);
     ship.y = parseInt(yi);
     ship.axis = axis;
+
+    // If the ship is already in the array, modify it.
+    if (occupiedSquares.filter(e  => e.name === ship.name).length > 0) {
+      let shipStart = occupiedSquares.filter(e=> e.name === ship.name)[0]
+      for (let i = 0; i < ship.length; i++) {
+        if (axis === "x") {
+          shipStart.x = ship.x + 1;
+          shipStart.y = ship.y;
+        } else {
+          shipStart.x = ship.x;
+          shipStart.y = ship.y + 1;
+        }
+      }
+      return ship
+    }
+
+    // Else push the ship to the array
     for (let i = 0; i < ship.length; i++) {
       if (axis === "x") {
-        occupiedSquares.push({ x: ship.x + i, y: ship.y });
+        occupiedSquares.push({ x: ship.x + i, y: ship.y, name: ship.name });
       } else {
-        occupiedSquares.push({ x: ship.x, y: ship.y + i });
+        occupiedSquares.push({ x: ship.x, y: ship.y + i, name: ship.name });
       }
     }
     return ship;
   };
+
+
+
   const shotRecord = [];
   const receiveAttack = (x, y) => {
     shotRecord.push({ x, y });
@@ -199,9 +218,6 @@ const Player = (_name = null) => {
 
 let human = Player("You");
 let computer = Player("Computer");
-const testPlayer1 = Player('bob');
-const testPlayer2 = Player('alice');
-console.log(testPlayer1)
 
 // Give computer an attack strategy
 computer.randomAttack = function (enemy) {
@@ -214,8 +230,7 @@ computer.randomAttack = function (enemy) {
     y = Math.floor(Math.random() * enemy.gameboard.boardLength);
   }
   //  Returns true if success
-  return computer.attack(enemy, x, y)
-  
+  return computer.attack(enemy, x, y);
 };
 
 // isBlocked() helps computer place its ships
@@ -223,17 +238,22 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
   let coOrdinatesToTest = [];
   if (axis === "x") {
     for (let i = 0; i < ship.length; i++) {
-      coOrdinatesToTest.push({ x: xpos + i, y: ypos });
+      coOrdinatesToTest.push({ x: parseInt(xpos) + i, y: parseInt(ypos) });
     }
   } else if (axis === "y") {
     for (let i = 0; i < ship.length; i++) {
-      coOrdinatesToTest.push({ x: xpos, y: ypos + i });
+      coOrdinatesToTest.push({ x: parseInt(xpos), y: parseInt(ypos) + i });
     }
   }
   for (let i = 0; i < coOrdinatesToTest.length; i++) {
     if (
       occSqArr.filter(
-        (e) => e.x === coOrdinatesToTest[i].x && e.y === coOrdinatesToTest[i].y
+        (e) =>
+          e.x == coOrdinatesToTest[i].x &&
+          e.y == coOrdinatesToTest[i].y &&
+          e.x !== null &&
+          e.y !== null &&
+          e.name !== ship.name
       ).length > 0
     ) {
       return true;
