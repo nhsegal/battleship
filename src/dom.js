@@ -63,14 +63,19 @@ const makeFleet = (someDiv, callback = null) => {
 };
 
 const displayAttack = (player, x, y, success) => {
-  let loc = null;
+  let parent = null;
   if (player === "computer") {
-    loc = `playerGB` + x + y;
+    parent = 'playerGB';
   }
   if (player === "human") {
-    loc = `cpuGB` + x + y;
+    parent = 'cpuGB'
   }
-  let element = document.getElementById(`${loc}`);
+
+  let whichBoard = document.getElementById(`${parent}`);
+  console.log(whichBoard);
+  let element = whichBoard.querySelector(`[data-x="${x}"][data-y="${y}"]`); //document.getElementById(`${loc}`);
+  //*///
+  
   if (success) {
     element.classList.add("hit");
   } else {

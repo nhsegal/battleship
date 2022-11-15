@@ -5,27 +5,29 @@ import {
   playerGB,
   addCallbackToGameboard,
   removeCallbackFromGameboard,
+  cpuGB,
 } from "./dom.js";
 import { human, isBlocked } from "./gamePieces.js";
+import { game } from "./gamePlay.js";
 
 let setShip = false;
 const changeShipButton = document.getElementById("changeShip");
 let shipIndex = 0;
 let currentShip = human.gameboard.fleet[shipIndex];
-let escape = false;
+
 
 // On click callback
 const setGridPosition = (e, ship) => {
-  let x = e.target.id.slice(-1);
-  let y = e.target.id.slice(-2, -1);
+  let x =  e.target.getAttribute("data-x")
+  let y = e.target.getAttribute("data-y")
 
   // If the ship is placed and user is not clicking on head of that ship, ignore it
   // Otherwise remove the ship from the occupied array and scrub it off the board
   if (setShip) {
     if (
       !(
-        e.target.getAttribute("data-x") == ship.x &&
-        e.target.getAttribute("data-y") == ship.y
+       x == ship.x &&
+        y == ship.y
       )
     ) {
       return;
@@ -37,7 +39,6 @@ const setGridPosition = (e, ship) => {
       let allCells = [...document.querySelectorAll(".cell")];
       allCells.forEach((e) => {
         if (e.dataset.ship === `${ship.name}`) {
-          console.log("removing");
           e.classList.remove("set");
         }
       });
@@ -59,22 +60,15 @@ const setGridPosition = (e, ship) => {
   // If the ship overlaps with another ship, don't place it, just exit
   if (isBlocked(ship, ship.axis, x, y, human.gameboard.occupiedSquares)) {
     console.log(human.gameboard.occupiedSquares);
-    console.log(x, y);
     console.log("blocked");
     return;
   }
-  /*
-  let allCells = [...document.querySelectorAll(".cell")];
-  allCells.forEach((e) => {
-    if (e.dataset.ship === `${ship.name}`) {
-      e.classList.remove("set");
-    }
-  });
-  */
+
   setShip = true;
   // Place ship, mark the board
 
   human.gameboard.placeShip(ship.name, x, y, ship.axis);
+  console.log(human.gameboard)
 
   for (let i = 0; i < ship.length; i++) {
     let cell = null;
@@ -90,8 +84,7 @@ const setGridPosition = (e, ship) => {
       cell.classList.add("head");
     }
     cell.classList.add("hasShip");
-    console.log("adding set");
-    escape = true;
+
     cell.classList.add("set");
     cell.dataset.ship = `${ship.name}`;
   }
@@ -107,24 +100,24 @@ const setGridPositionWrapper = (e) => {
 
 // On double-click
 const setOrientation = (e, ship) => {
-  /*
-  if (setShip) {
-    setShip = false;
     if (
       e.target.getAttribute("data-x") == ship.x &&
-      e.target.getAttribute("data-y") == ship.y
+      e.target.getAttribute("data-y") == ship.y &&
+      setShip === true
     ) {
       /// Problem below!!
+      setShip = false;
       for (let i = 0; i < ship.length; i++) {
         human.gameboard.occupiedSquares.pop();
       }
     }
-  }
+  
   // Clear the ship's position if it is already set
   let allCells = [...document.querySelectorAll(".cell")];
   allCells.forEach((e) => {
     if (e.dataset.ship === `${ship.name}`) {
       e.classList.remove(`set`);
+      e.classList.remove('hasShip')
     }
   });
 
@@ -157,7 +150,7 @@ const setOrientation = (e, ship) => {
       cell.dataset.ship = `${ship.name}`;
     }
   }
-  */
+
 };
 const setOrientationWrapper = (e) => {
   setOrientation(e, currentShip);
@@ -170,8 +163,10 @@ const hoverEffect = (e, ship) => {
   //console.log(e.target);
 
   // If the ship can't fit, no hover effect
-  let x = e.target.id.slice(-1);
-  let y = e.target.id.slice(-2, -1);
+  let x =  e.target.getAttribute("data-x");
+  let y =  e.target.getAttribute("data-y");
+
+
   if (ship.axis === "x") {
     if (x > 10 - ship.length) {
       return;
@@ -195,8 +190,9 @@ const hoverEffect = (e, ship) => {
       e.classList.remove(`head`);
     }
   });
-  ship.x = e.target.id.slice(-1);
-  ship.y = e.target.id.slice(-2, -1);
+  ship.x = e.target.getAttribute("data-x")
+  ship.y = e.target.getAttribute("data-y")
+ 
   for (let i = 0; i < ship.length; i++) {
     if (ship.axis === "x") {
       let xcord = parseInt(ship.x) + i;
@@ -228,7 +224,6 @@ const hoverEffectWrapper = (e) => {
 
 // On button press
 const getNextShip = () => {
-  console.log(human.gameboard.fleet);
   removeCallbackFromGameboard(playerGB, setGridPositionWrapper, "click");
   removeCallbackFromGameboard(playerGB, setOrientationWrapper, "dblclick");
   removeCallbackFromGameboard(playerGB, hoverEffectWrapper, "mouseover");
@@ -238,7 +233,16 @@ const getNextShip = () => {
     changeShipButton.textContent = "Finish";
   }
   if (shipIndex == human.gameboard.fleet.length) {
+    cpuGBcontainer.style.display = "block";
+    let allCells = [...document.querySelectorAll(".cell")];
+      allCells.forEach((e) => {
+       
+          e.classList.remove("head");
+        
+      });
+
     console.log("DONE!");
+    game();
     return;
   }
   currentShip = human.gameboard.fleet[shipIndex];
@@ -248,7 +252,6 @@ const getNextShip = () => {
    addCallbackToGameboard(playerGB, setOrientationWrapper, "dblclick");
    addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
   setShip = false;
-  escape = false;
 };
 
 changeShipButton.addEventListener("click", getNextShip);
@@ -259,11 +262,8 @@ const humanPlaceShips = () => {
 
   // Make the human gameboard once
   makeGameboard(playerGB);
-
   addCallbackToGameboard(playerGB, setGridPositionWrapper, "click");
-
   addCallbackToGameboard(playerGB, setOrientationWrapper, "dblclick");
-
   addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
 };
 

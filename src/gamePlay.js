@@ -11,9 +11,8 @@ import {
   makeFleet,
   preGameFleet
 } from "./dom.js";
-import { humanPlaceShips } from "./humanPlaceShips.js";
 
-
+/*
 const revealPlayerShips = () => {
   for (const ship of human.gameboard.fleet) {
     let loc = null;
@@ -32,7 +31,7 @@ const revealPlayerShips = () => {
     }
   }
 };
-
+*/
 const game = () => {
   let gameOver = false;
   let boardLocked = false;
@@ -48,8 +47,10 @@ const game = () => {
     }
     boardLocked = true;
     announcements.textContent = "";
-    let y = parseInt(e.target.id.slice(-2)) % 10;
-    let x = Math.floor(parseInt(e.target.id.slice(-2)) / 10);
+   
+    let x = e.target.getAttribute("data-x");
+    let y = e.target.getAttribute("data-y");
+  
     let before = countSunkShips(computer);
     let attack = human.attack(computer, x, y);
     if (attack.success) {
@@ -113,9 +114,9 @@ const game = () => {
     return { count, list };
   };
 
-  makeGameboard(playerGB);
+  //makeGameboard(playerGB);
   makeGameboard(cpuGB, playerTurn);
-  revealPlayerShips();
+  //revealPlayerShips();
 
 };
 
