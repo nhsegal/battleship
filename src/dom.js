@@ -9,6 +9,8 @@ const endGameMsg = document.querySelector("[data-end-game-message]");
 const endGameScreen = document.getElementById("end-game-message");
 const preGameFleet = document.getElementById("fleet");
 
+
+
 const makeGameboard = (someDiv, callback = null) => {
   for (let i = 0; i < 100; i++) {
     let cell = document.createElement("div");
@@ -93,5 +95,5 @@ export {
   preGameFleet,
   cpuGBcontainer,
   addCallbackToGameboard,
-  removeCallbackFromGameboard
+  removeCallbackFromGameboard,
 };

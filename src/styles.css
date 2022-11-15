@@ -81,9 +81,13 @@ h1{
 }
 
 .cell.hit, .cell.miss {
-/*#playerGB>.cell {*/
+
   cursor: not-allowed;
 }
+#playerGB>.cell.gameOn{
+  cursor: not-allowed;
+}
+
 
 .cell.hit::before {
   content: '';
@@ -145,6 +149,7 @@ h1{
 #restart-button {
   font-size: 2rem;
   background-color: white;
+  color: black;
   border: 1px solid black;
   cursor: pointer;
   border-radius: 0.8rem;
@@ -177,9 +182,7 @@ h1{
 
 #bottom{
   display: flex;
-
   justify-items: center;
-
   justify-content: center;
   align-content: center;
 }
@@ -218,4 +221,8 @@ button[disabled]{
   text-align: left;
   font-size: 1.2rem;
 
+}
+
+#restart-button {
+  color: black;
 }

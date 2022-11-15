@@ -2,14 +2,12 @@ import { computer, human } from "./gamePieces.js";
 import {
   makeGameboard, 
   displayAttack, 
-  playerGB, 
   cpuGB, 
   hitOrMiss, 
   announcements, 
   endGameMsg, 
   endGameScreen, 
-  makeFleet,
-  preGameFleet
+  
 } from "./dom.js";
 
 
@@ -47,7 +45,6 @@ const game = () => {
    
     let x = e.target.getAttribute("data-x");
     let y = e.target.getAttribute("data-y");
-    console.log(x, y)
   
     let before = countSunkShips(computer);
     let attack = human.attack(computer, x, y);
@@ -113,12 +110,8 @@ const game = () => {
     return { count, list };
   };
 
-  //makeGameboard(playerGB);
-  console.log(computer.gameboard);
   makeGameboard(cpuGB, playerTurn);
- 
   revealCPUShips();
-
 };
 
 export { game }

@@ -6,8 +6,10 @@ import {
   addCallbackToGameboard,
   removeCallbackFromGameboard,
   cpuGB,
+  endGameMsg,
+  endGameScreen
 } from "./dom.js";
-import { human, isBlocked } from "./gamePieces.js";
+import { computer, human, isBlocked } from "./gamePieces.js";
 import { game } from "./gamePlay.js";
 
 let setShip = false;
@@ -153,6 +155,7 @@ const setOrientation = (e, ship) => {
   }
 
 };
+
 const setOrientationWrapper = (e) => {
   setOrientation(e, currentShip);
 };
@@ -240,6 +243,7 @@ const getNextShip = () => {
     let allCells = [...document.querySelectorAll(".cell")];
       allCells.forEach((e) => {
           e.classList.remove("head");
+          e.classList.add("gameOn");
       });
 
     
@@ -275,5 +279,26 @@ const humanPlaceShips = () => {
   addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
 };
 
+
+const restartButton = document.getElementById("restart-button");
+const reset = () => {
+  human.gameboard.occupiedSquares.length = 0;
+  computer.gameboard.occupiedSquares.length = 0;
+  human.gameboard.fleet.forEach( ship => {
+    ship.x = null;
+    ship.y = null;
+  });
+  computer.gameboard.fleet.forEach( ship => {
+    ship.x = null;
+    ship.y = null;
+  });
+  computer.randomlyPlaceShips();
+  endGameScreen.classList.remove("show");
+  endGameMsg.textContent = ''
+  humanPlaceShips();
+
+}
+
+restartButton.addEventListener('click', reset);
 
 export { humanPlaceShips };
