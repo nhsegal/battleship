@@ -111,6 +111,8 @@ const Gameboard = () => {
 
   const shotRecord = [];
   const receiveAttack = (x, y) => {
+    x = parseInt(x);
+    y = parseInt(y);
     shotRecord.push({ x, y });
     let success = false;
     fleet.forEach((ship) => {
@@ -148,7 +150,9 @@ const Gameboard = () => {
 const Player = (_name = null) => {
   const name = _name;
   const gameboard = Gameboard();
-  const attack = (opponent, x, y) => {
+  const attack = (opponent, _x, _y) => {
+    let x = parseInt(_x);
+    let y = parseInt(_y);
     if (
       x < 0 ||
       x >= opponent.gameboard.boardLength ||

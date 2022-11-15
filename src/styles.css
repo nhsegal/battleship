@@ -175,12 +175,23 @@ h1{
   border-radius: 50%;
 }
 
+#bottom{
+  display: flex;
+
+  justify-items: center;
+
+  justify-content: center;
+  align-content: center;
+}
+
 button {
   margin: 1rem;
   border: 1px solid #0066cc;
   background-color: #0099cc;
   color: #ffffff;
   padding: 5px 10px;
+  font-size: 1.5rem;
+  border-radius: .4rem;
 }
 
 button:hover {
@@ -197,3 +208,14 @@ button[disabled]{
   color: #666666;
 }
 
+#announcements{
+ text-align: center;
+ font-size: 2rem;
+}
+
+
+#announcements.instructions {
+  text-align: left;
+  font-size: 1.2rem;
+
+}

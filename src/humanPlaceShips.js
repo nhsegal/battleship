@@ -33,6 +33,7 @@ const setGridPosition = (e, ship) => {
       return;
     } else {
       setShip = false;
+      changeShipButton.disabled = true;
       for (let i = 0; i < ship.length; i++) {
         human.gameboard.occupiedSquares.pop();
       }
@@ -68,7 +69,6 @@ const setGridPosition = (e, ship) => {
   // Place ship, mark the board
 
   human.gameboard.placeShip(ship.name, x, y, ship.axis);
-  console.log(human.gameboard)
 
   for (let i = 0; i < ship.length; i++) {
     let cell = null;
@@ -107,6 +107,7 @@ const setOrientation = (e, ship) => {
     ) {
       /// Problem below!!
       setShip = false;
+      changeShipButton.disabled = true;
       for (let i = 0; i < ship.length; i++) {
         human.gameboard.occupiedSquares.pop();
       }
@@ -160,7 +161,6 @@ const setOrientationWrapper = (e) => {
 const hoverEffect = (e, ship) => {
   // If ship is placed, no hover effect
   if (setShip) return;
-  //console.log(e.target);
 
   // If the ship can't fit, no hover effect
   let x =  e.target.getAttribute("data-x");
@@ -233,15 +233,16 @@ const getNextShip = () => {
     changeShipButton.textContent = "Finish";
   }
   if (shipIndex == human.gameboard.fleet.length) {
+    announcements.textContent = '';
+    announcements.classList.remove('instructions');
+    changeShipButton.style.display = 'none';
     cpuGBcontainer.style.display = "block";
     let allCells = [...document.querySelectorAll(".cell")];
       allCells.forEach((e) => {
-       
           e.classList.remove("head");
-        
       });
 
-    console.log("DONE!");
+    
     game();
     return;
   }
@@ -256,9 +257,16 @@ const getNextShip = () => {
 
 changeShipButton.addEventListener("click", getNextShip);
 
+const instructions = () => {
+  announcements.innerHTML = "Click on a cell to place a ship. Clicking on the head of the most recently placed ship allows you to move it again. <br/> &nbsp <br/> Double-clicking changes the ship's oriention. <br/> &nbsp <br/>After placing a ship, get the next one by pressing the button."
+  announcements.classList.add('instructions')
+}
+
+
 const humanPlaceShips = () => {
   // Hide enemy board
   cpuGBcontainer.style.display = "none";
+  instructions();
 
   // Make the human gameboard once
   makeGameboard(playerGB);
@@ -266,5 +274,6 @@ const humanPlaceShips = () => {
   addCallbackToGameboard(playerGB, setOrientationWrapper, "dblclick");
   addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
 };
+
 
 export { humanPlaceShips };

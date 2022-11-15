@@ -72,10 +72,7 @@ const displayAttack = (player, x, y, success) => {
   }
 
   let whichBoard = document.getElementById(`${parent}`);
-  console.log(whichBoard);
-  let element = whichBoard.querySelector(`[data-x="${x}"][data-y="${y}"]`); //document.getElementById(`${loc}`);
-  //*///
-  
+  let element = whichBoard.querySelector(`[data-x="${x}"][data-y="${y}"]`); 
   if (success) {
     element.classList.add("hit");
   } else {

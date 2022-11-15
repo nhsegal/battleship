@@ -12,10 +12,9 @@ import {
   preGameFleet
 } from "./dom.js";
 
-/*
-const revealPlayerShips = () => {
-  for (const ship of human.gameboard.fleet) {
-    let loc = null;
+
+const revealCPUShips = () => {
+  for (const ship of computer.gameboard.fleet) {
     for (let i = 0; i < ship.length; i++) {
       let x = ship.x;
       let y = ship.y;
@@ -24,18 +23,16 @@ const revealPlayerShips = () => {
       } else {
         y = y + i;
       }
-      loc = `playerGB` + x + y;
-      let element = document.getElementById(`${loc}`);
+      let element = cpuGB.querySelector( `[data-x="${x}"][data-y="${y}"]`);
       element.classList.add("hasShip");
       element.setAttribute("data-name", `${ship.name}`);
     }
   }
 };
-*/
+
 const game = () => {
   let gameOver = false;
   let boardLocked = false;
-  
 
   const playerTurn = function (e) {
     if (gameOver) return;
@@ -50,9 +47,11 @@ const game = () => {
    
     let x = e.target.getAttribute("data-x");
     let y = e.target.getAttribute("data-y");
+    console.log(x, y)
   
     let before = countSunkShips(computer);
     let attack = human.attack(computer, x, y);
+   
     if (attack.success) {
       hitOrMiss.textContent = "You hit the enemy!";
       displayAttack("human", attack.x, attack.y, true);
@@ -115,8 +114,10 @@ const game = () => {
   };
 
   //makeGameboard(playerGB);
+  console.log(computer.gameboard);
   makeGameboard(cpuGB, playerTurn);
-  //revealPlayerShips();
+ 
+  revealCPUShips();
 
 };
 
