@@ -7,7 +7,8 @@ import {
   removeCallbackFromGameboard,
   cpuGB,
   endGameMsg,
-  endGameScreen
+  endGameScreen,
+  hitOrMiss,
 } from "./dom.js";
 import { computer, human, isBlocked } from "./gamePieces.js";
 import { game } from "./gamePlay.js";
@@ -17,21 +18,15 @@ const changeShipButton = document.getElementById("changeShip");
 let shipIndex = 0;
 let currentShip = human.gameboard.fleet[shipIndex];
 
-
 // On click callback
 const setGridPosition = (e, ship) => {
-  let x =  e.target.getAttribute("data-x")
-  let y = e.target.getAttribute("data-y")
+  let x = e.target.getAttribute("data-x");
+  let y = e.target.getAttribute("data-y");
 
   // If the ship is placed and user is not clicking on head of that ship, ignore it
   // Otherwise remove the ship from the occupied array and scrub it off the board
   if (setShip) {
-    if (
-      !(
-       x == ship.x &&
-        y == ship.y
-      )
-    ) {
+    if (!(x == ship.x && y == ship.y)) {
       return;
     } else {
       setShip = false;
@@ -102,25 +97,25 @@ const setGridPositionWrapper = (e) => {
 
 // On double-click
 const setOrientation = (e, ship) => {
-    if (
-      e.target.getAttribute("data-x") == ship.x &&
-      e.target.getAttribute("data-y") == ship.y &&
-      setShip === true
-    ) {
-      /// Problem below!!
-      setShip = false;
-      changeShipButton.disabled = true;
-      for (let i = 0; i < ship.length; i++) {
-        human.gameboard.occupiedSquares.pop();
-      }
+  if (
+    e.target.getAttribute("data-x") == ship.x &&
+    e.target.getAttribute("data-y") == ship.y &&
+    setShip === true
+  ) {
+    /// Problem below!!
+    setShip = false;
+    changeShipButton.disabled = true;
+    for (let i = 0; i < ship.length; i++) {
+      human.gameboard.occupiedSquares.pop();
     }
-  
+  }
+
   // Clear the ship's position if it is already set
   let allCells = [...document.querySelectorAll(".cell")];
   allCells.forEach((e) => {
     if (e.dataset.ship === `${ship.name}`) {
       e.classList.remove(`set`);
-      e.classList.remove('hasShip')
+      e.classList.remove("hasShip");
     }
   });
 
@@ -153,7 +148,6 @@ const setOrientation = (e, ship) => {
       cell.dataset.ship = `${ship.name}`;
     }
   }
-
 };
 
 const setOrientationWrapper = (e) => {
@@ -166,9 +160,8 @@ const hoverEffect = (e, ship) => {
   if (setShip) return;
 
   // If the ship can't fit, no hover effect
-  let x =  e.target.getAttribute("data-x");
-  let y =  e.target.getAttribute("data-y");
-
+  let x = e.target.getAttribute("data-x");
+  let y = e.target.getAttribute("data-y");
 
   if (ship.axis === "x") {
     if (x > 10 - ship.length) {
@@ -193,9 +186,9 @@ const hoverEffect = (e, ship) => {
       e.classList.remove(`head`);
     }
   });
-  ship.x = e.target.getAttribute("data-x")
-  ship.y = e.target.getAttribute("data-y")
- 
+  ship.x = e.target.getAttribute("data-x");
+  ship.y = e.target.getAttribute("data-y");
+
   for (let i = 0; i < ship.length; i++) {
     if (ship.axis === "x") {
       let xcord = parseInt(ship.x) + i;
@@ -236,36 +229,35 @@ const getNextShip = () => {
     changeShipButton.textContent = "Finish";
   }
   if (shipIndex == human.gameboard.fleet.length) {
-    announcements.textContent = '';
-    announcements.classList.remove('instructions');
-    changeShipButton.style.display = 'none';
+    announcements.textContent = "";
+    announcements.classList.remove("instructions");
+    changeShipButton.style.display = "none";
     cpuGBcontainer.style.display = "block";
     let allCells = [...document.querySelectorAll(".cell")];
-      allCells.forEach((e) => {
-          e.classList.remove("head");
-          e.classList.add("gameOn");
-      });
+    allCells.forEach((e) => {
+      e.classList.remove("head");
+      e.classList.add("gameOn");
+    });
 
-    
     game();
     return;
   }
   currentShip = human.gameboard.fleet[shipIndex];
 
   changeShipButton.disabled = true;
-   addCallbackToGameboard(playerGB, setGridPositionWrapper, "click");
-   addCallbackToGameboard(playerGB, setOrientationWrapper, "dblclick");
-   addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
+  addCallbackToGameboard(playerGB, setGridPositionWrapper, "click");
+  addCallbackToGameboard(playerGB, setOrientationWrapper, "dblclick");
+  addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
   setShip = false;
 };
 
 changeShipButton.addEventListener("click", getNextShip);
 
 const instructions = () => {
-  announcements.innerHTML = "Click on a cell to place a ship. Clicking on the head of the most recently placed ship allows you to move it again. <br/> &nbsp <br/> Double-clicking changes the ship's oriention. <br/> &nbsp <br/>After placing a ship, get the next one by pressing the button."
-  announcements.classList.add('instructions')
-}
-
+  announcements.innerHTML =
+    "Click on a cell to place a ship. Clicking on the head of the most recently placed ship allows you to move it again. <br/> &nbsp <br/> Double-clicking changes the ship's oriention. <br/> &nbsp <br/>When you finish placing ships, attack your oopponent by clicking on their board.";
+  announcements.classList.add("instructions");
+};
 
 const humanPlaceShips = () => {
   // Hide enemy board
@@ -279,26 +271,42 @@ const humanPlaceShips = () => {
   addCallbackToGameboard(playerGB, hoverEffectWrapper, "mouseover");
 };
 
-
 const restartButton = document.getElementById("restart-button");
 const reset = () => {
   human.gameboard.occupiedSquares.length = 0;
+  human.gameboard.shotRecord.length = 0;
   computer.gameboard.occupiedSquares.length = 0;
-  human.gameboard.fleet.forEach( ship => {
+  computer.gameboard.shotRecord.length = 0;
+
+  human.gameboard.fleet.forEach((ship) => {
     ship.x = null;
     ship.y = null;
+    ship.setHits = 0;
   });
-  computer.gameboard.fleet.forEach( ship => {
+  computer.gameboard.fleet.forEach((ship) => {
     ship.x = null;
     ship.y = null;
+    ship.setHits = 0;
   });
+  while (cpuGB.firstChild) {
+    cpuGB.removeChild(cpuGB.lastChild);
+  }
+  while (playerGB.firstChild) {
+    playerGB.removeChild(playerGB.lastChild);
+  }
   computer.randomlyPlaceShips();
   endGameScreen.classList.remove("show");
-  endGameMsg.textContent = ''
+  endGameMsg.textContent = "";
+  hitOrMiss.textContent = "";
+  setShip = false;
+  shipIndex = 0;
+  currentShip = human.gameboard.fleet[shipIndex];
+  changeShipButton.style.display = "block";
+  changeShipButton.disabled = true;
+  changeShipButton.textContent = "Get next ship";
   humanPlaceShips();
+};
 
-}
-
-restartButton.addEventListener('click', reset);
+restartButton.addEventListener("click", reset);
 
 export { humanPlaceShips };

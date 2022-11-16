@@ -23,6 +23,9 @@ const Ship = (len, name = null, xi = null, yi = null, _axis = "x") => {
     get hitNumber() {
       return _hitNumber;
     },
+    set setHits(val) {
+      _hitNumber = val;
+    },
     hit,
     isSunk,
   };
