@@ -1,5 +1,5 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -8,7 +8,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Output Management',
+      title: "Output Management",
     }),
   ],
   output: {
@@ -17,10 +17,10 @@ module.exports = {
     filename: "[name][contenthash].js",
     clean: true,
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'src')
+      directory: path.resolve(__dirname, "src"),
     },
     port: 3000,
     open: true,
@@ -36,16 +36,19 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
+      },
+      {
+        test: /\.mp3$/,
+        type: "asset/resource",
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Battleship!',
-      filename: 'index.html',
-      template: 'src/template.html'
+      title: "Battleship!",
+      filename: "index.html",
+      template: "src/template.html",
     }),
-   
-  ]
+  ],
 };

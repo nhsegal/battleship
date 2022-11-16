@@ -255,7 +255,7 @@ changeShipButton.addEventListener("click", getNextShip);
 
 const instructions = () => {
   announcements.innerHTML =
-    "Click on a cell to place a ship. Clicking on the head of the most recently placed ship allows you to move it again. <br/> &nbsp <br/> Double-clicking changes the ship's oriention. <br/> &nbsp <br/>When you finish placing ships, attack your oopponent by clicking on their board.";
+    "Click on a cell to place a ship. Clicking on the head of the most recently placed ship allows you to move it again. <br/> &nbsp <br/> Double-clicking changes the ship's oriention. <br/> &nbsp <br/>When you finish placing ships, attack your opponent by clicking on their board.";
   announcements.classList.add("instructions");
 };
 
