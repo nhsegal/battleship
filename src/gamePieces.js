@@ -1,3 +1,33 @@
+import fire_shot from './fire_shot.mp3';
+import shot_hit from './shot_hit.mp3';
+import shot_miss from './shot_miss.mp3';
+
+const fireShot = new Audio(fire_shot);
+const shotHit = new Audio(shot_hit);
+const shotMiss = new Audio(shot_miss);
+fireShot.load();
+shotHit.load();
+shotMiss.load();
+
+function playFire(){
+  return new Promise(res=>{
+    fireShot.play()
+    fireShot.onended = res
+  })
+}
+async function playSound(result){
+  const audio = fireShot;
+  await playFire(audio);
+  if (result === true){
+    console.log('hadsfasd')
+    shotHit.play();
+  } else {
+    shotMiss.play();
+  } 
+
+  
+}
+
 const Ship = (len, name = null, xi = null, yi = null, _axis = "x") => {
   let _hitNumber = 0;
   const x = xi;
@@ -118,21 +148,27 @@ const Gameboard = () => {
     y = parseInt(y);
     shotRecord.push({ x, y });
     let success = false;
-    fleet.forEach((ship) => {
+    let exit = false;
+    for (const ship of fleet) {
       if (ship.axis === "x") {
         if (x >= ship.x && x < ship.x + ship.length && y === ship.y) {
           ship.hit();
           success = true;
+          playSound(true);
           return success;
         }
       } else if (ship.axis === "y") {
         if (x === ship.x && y >= ship.y && y < ship.y + ship.length) {
           ship.hit();
           success = true;
+          playSound(true);
           return success;
         }
       }
-    });
+    }
+ 
+
+    playSound(false)
     return success;
   };
   const allSunk = () => {
@@ -170,6 +206,7 @@ const Player = (_name = null) => {
     ) {
       throw new Error("Attack redundant");
     }
+    
     return { success: opponent.gameboard.receiveAttack(x, y), x, y };
   };
 

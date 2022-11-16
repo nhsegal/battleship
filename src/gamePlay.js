@@ -1,6 +1,4 @@
-import fire_shot from './fire_shot.mp3';
-import shot_hit from './shot_hit.mp3';
-import shot_miss from './shot_miss.mp3';
+
 import { computer, human } from "./gamePieces.js";
 import {
   makeGameboard, 
@@ -13,11 +11,6 @@ import {
   
 } from "./dom.js";
 
-const fireShot = new Audio(fire_shot);
-const shotHit = new Audio(shot_hit);
-const shotMiss = new Audio(shot_miss);
-fireShot.load();
-shotHit.load();
 
 const revealCPUShips = () => {
   for (const ship of computer.gameboard.fleet) {
@@ -55,11 +48,11 @@ const game = () => {
     let y = e.target.getAttribute("data-y");
   
     let before = countSunkShips(computer);
-    fireShot.play();
+
     let attack = human.attack(computer, x, y);
    
     if (attack.success) {
-      shotHit.play();
+
       hitOrMiss.textContent = "You hit the enemy!";
       displayAttack("human", attack.x, attack.y, true);
       let after = countSunkShips(computer);
@@ -79,16 +72,16 @@ const game = () => {
       hitOrMiss.textContent = "You missed!";
       displayAttack("human", attack.x, attack.y, false);
     }
-    setTimeout(computerTurn, 1000);
+    setTimeout(computerTurn, 2500);
 
   };
 
   const computerTurn = function () {
     let before = countSunkShips(human);
-    fireShot.play();
+
     let attack = computer.randomAttack(human);
     if (attack.success) {
-      shotHit.play()
+      
       hitOrMiss.textContent = "You've been hit!";
       displayAttack("computer", attack.x, attack.y, true);
       let after = countSunkShips(human);
@@ -124,7 +117,7 @@ const game = () => {
   };
 
   makeGameboard(cpuGB, playerTurn);
-  revealCPUShips();
+  //revealCPUShips();
 };
 
 export { game }
