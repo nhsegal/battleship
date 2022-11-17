@@ -81,13 +81,13 @@ const game = () => {
       }
     },1000);
 
- 
     setTimeout(computerTurn, 2500);
   };
 
   const computerTurn = function () {
     const before = countSunkShips(human);
-    const attack = computer.randomAttack(human);
+    const attack = computer.strategicAttack(human);
+    console.log(attack);
     setTimeout(()=> {
       if (attack.success) {
         hitOrMiss.textContent = "You've been hit!";

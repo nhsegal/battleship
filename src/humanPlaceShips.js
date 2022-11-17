@@ -56,7 +56,6 @@ const setGridPosition = (e, ship) => {
   }
   // If the ship overlaps with another ship, don't place it, just exit
   if (isBlocked(ship, ship.axis, x, y, human.gameboard.occupiedSquares)) {
-    console.log(human.gameboard.occupiedSquares);
     console.log('blocked');
     return;
   }
