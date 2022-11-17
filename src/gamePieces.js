@@ -304,22 +304,6 @@ computer.randomAttack = (enemy) => {
 };
 
 computer.strategicAttack = (enemy) => {
-  let length = enemy.gameboard.shotRecord.length;
-  let goodMovesArr = enemy.gameboard.shotRecord.filter(e => e.success);
-  let lastGoodMove = goodMovesArr[goodMovesArr.length-1];
-  console.log(lastGoodMove)
-  if (length === 0 || !lastGoodMove) {
-    console.log("random1")
-    return computer.randomAttack(enemy);
-  }
-
-  let adjacentCells = [
-    { x: parseInt(lastGoodMove.x, 10) - 1, y: parseInt(lastGoodMove.y, 10) },
-    { x: parseInt(lastGoodMove.x, 10) + 1, y: parseInt(lastGoodMove.y, 10) },
-    { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) - 1 },
-    { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) + 1 },
-  ];
-
   const inBounds = (e) => {
     return e.x >= 0 && e.x < 10 && e.y >= 0 && e.y < 10;
   };
@@ -334,10 +318,35 @@ computer.strategicAttack = (enemy) => {
       }
       return true;
   };
+  let length = enemy.gameboard.shotRecord.length;
+  let goodMovesArr = enemy.gameboard.shotRecord.filter(e => e.success);
+  let lastGoodMove = goodMovesArr[goodMovesArr.length-1];
+  if (length === 0 || goodMovesArr.length === 0) {
+    console.log("random1")
+    return computer.randomAttack(enemy);
+  }
+  let adjacentCells = [
+    { x: parseInt(lastGoodMove.x, 10) - 1, y: parseInt(lastGoodMove.y, 10) },
+    { x: parseInt(lastGoodMove.x, 10) + 1, y: parseInt(lastGoodMove.y, 10) },
+    { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) - 1 },
+    { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) + 1 },
+  ];
+  let goodNextMoves = adjacentCells.filter(inBounds).filter(notTaken);
+  let i = goodMovesArr.length-1;
+  while (goodNextMoves.length < 1 && i > 0){
+    i--;
+    lastGoodMove = goodMovesArr[i];
+    adjacentCells = [
+      { x: parseInt(lastGoodMove.x, 10) - 1, y: parseInt(lastGoodMove.y, 10) },
+      { x: parseInt(lastGoodMove.x, 10) + 1, y: parseInt(lastGoodMove.y, 10) },
+      { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) - 1 },
+      { x: parseInt(lastGoodMove.x, 10), y: parseInt(lastGoodMove.y, 10) + 1 },
+    ];
+    goodNextMoves = adjacentCells.filter(inBounds).filter(notTaken);
+  }
 
-  let goodMoves = adjacentCells.filter(inBounds).filter(notTaken);
-  if (goodMoves.length > 0) {
-    let move = goodMoves[(goodMoves.length * Math.random()) | 0];
+  if (goodNextMoves.length > 0) {
+    let move = goodNextMoves[(goodNextMoves.length * Math.random()) | 0];
     return computer.attack(enemy, move.x, move.y);
   } else {
     console.log("random2")
