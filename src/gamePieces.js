@@ -9,33 +9,30 @@ fireShot.load();
 shotHit.load();
 shotMiss.load();
 
-function playFire(){
-  return new Promise(res=>{
-    fireShot.play()
-    fireShot.onended = res
-  })
+function playFire() {
+  return new Promise((res) => {
+    fireShot.play();
+    fireShot.onended = res;
+  });
 }
-async function playSound(result){
+async function playSound(result) {
   const audio = fireShot;
   await playFire(audio);
-  if (result === true){
-    console.log('hadsfasd')
+  if (result === true) {
     shotHit.play();
   } else {
     shotMiss.play();
-  } 
-
-  
+  }
 }
 
-const Ship = (len, name = null, xi = null, yi = null, _axis = "x") => {
+const Ship = (len, name = null, xi = null, yi = null, _axis = 'x') => {
   let _hitNumber = 0;
   const x = xi;
   const y = yi;
   const axis = _axis;
-  let length = len;
+  const length = len;
   const hit = () => {
-    _hitNumber = _hitNumber + 1;
+    _hitNumber += 1;
     return _hitNumber;
   };
   const isSunk = () => {
@@ -61,64 +58,62 @@ const Ship = (len, name = null, xi = null, yi = null, _axis = "x") => {
   };
 };
 
-const Fleet = () => {
-  return [
-    Ship(5, "Carrier"),
-    Ship(4, "Battleship"),
-    Ship(3, "Cruiser"),
-    Ship(3, "Submarine"),
-    Ship(2, "Destroyer"),
-  ];
-};
+const Fleet = () => [
+  Ship(5, 'Carrier'),
+  Ship(4, 'Battleship'),
+  Ship(3, 'Cruiser'),
+  Ship(3, 'Submarine'),
+  Ship(2, 'Destroyer'),
+];
 
 const Gameboard = () => {
   const boardLength = 10;
   const fleet = Fleet();
   const occupiedSquares = [];
   const placeShip = (name, xi, yi, axis) => {
-    let ship = fleet.filter((item) => item.name === name)[0];
+    const ship = fleet.filter((item) => item.name === name)[0];
     if (xi < 0 || xi > boardLength - 1 || yi < 0 || yi > boardLength - 1) {
-      throw new Error("Location out of bounds");
+      throw new Error('Location out of bounds');
     }
     if (
-      (axis === "x" && xi > boardLength - ship.length) ||
-      (axis === "y" && yi > boardLength - ship.length)
+      (axis === 'x' && xi > boardLength - ship.length)
+      || (axis === 'y' && yi > boardLength - ship.length)
     ) {
-      throw new Error("Ship partially out of bounds");
+      throw new Error('Ship partially out of bounds');
     }
 
-    if (axis === "x") {
+    if (axis === 'x') {
       for (let i = 0; i < ship.length; i++) {
         if (
           occupiedSquares.filter(
-            (entry) => entry.x === xi + i && entry.y === yi
+            (entry) => entry.x === xi + i && entry.y === yi,
           ).length > 0
         ) {
-          throw new Error("Another ship is in the way");
+          throw new Error('Another ship is in the way');
         }
       }
     }
-    if (axis === "y") {
+    if (axis === 'y') {
       for (let i = 0; i < ship.length; i++) {
         if (
           occupiedSquares.filter(
-            (entry) => entry.x === xi && entry.y === yi + i
+            (entry) => entry.x === xi && entry.y === yi + i,
           ).length > 0
         ) {
-          throw new Error("Another ship is in the way");
+          throw new Error('Another ship is in the way');
         }
       }
     }
 
-    ship.x = parseInt(xi);
-    ship.y = parseInt(yi);
+    ship.x = parseInt(xi, 10);
+    ship.y = parseInt(yi, 10);
     ship.axis = axis;
 
     // If the ship is already in the array, modify it.
-    if (occupiedSquares.filter(e  => e.name === ship.name).length > 0) {
-      let shipStart = occupiedSquares.filter(e=> e.name === ship.name)[0]
+    if (occupiedSquares.filter((e) => e.name === ship.name).length > 0) {
+      const shipStart = occupiedSquares.filter((e) => e.name === ship.name)[0];
       for (let i = 0; i < ship.length; i++) {
-        if (axis === "x") {
+        if (axis === 'x') {
           shipStart.x = ship.x + 1;
           shipStart.y = ship.y;
         } else {
@@ -126,12 +121,12 @@ const Gameboard = () => {
           shipStart.y = ship.y + 1;
         }
       }
-      return ship
+      return ship;
     }
 
     // Else push the ship to the array
     for (let i = 0; i < ship.length; i++) {
-      if (axis === "x") {
+      if (axis === 'x') {
         occupiedSquares.push({ x: ship.x + i, y: ship.y, name: ship.name });
       } else {
         occupiedSquares.push({ x: ship.x, y: ship.y + i, name: ship.name });
@@ -140,24 +135,21 @@ const Gameboard = () => {
     return ship;
   };
 
-
-
   const shotRecord = [];
   const receiveAttack = (x, y) => {
-    x = parseInt(x);
-    y = parseInt(y);
+    x = parseInt(x, 10);
+    y = parseInt(y, 10);
     shotRecord.push({ x, y });
     let success = false;
-    let exit = false;
     for (const ship of fleet) {
-      if (ship.axis === "x") {
+      if (ship.axis === 'x') {
         if (x >= ship.x && x < ship.x + ship.length && y === ship.y) {
           ship.hit();
           success = true;
           playSound(true);
           return success;
         }
-      } else if (ship.axis === "y") {
+      } else if (ship.axis === 'y') {
         if (x === ship.x && y >= ship.y && y < ship.y + ship.length) {
           ship.hit();
           success = true;
@@ -166,14 +158,11 @@ const Gameboard = () => {
         }
       }
     }
- 
 
-    playSound(false)
+    playSound(false);
     return success;
   };
-  const allSunk = () => {
-    return fleet.every((ship) => ship.isSunk());
-  };
+  const allSunk = () => fleet.every((ship) => ship.isSunk());
 
   return {
     boardLength,
@@ -190,44 +179,44 @@ const Player = (_name = null) => {
   const name = _name;
   const gameboard = Gameboard();
   const attack = (opponent, _x, _y) => {
-    let x = parseInt(_x);
-    let y = parseInt(_y);
+    const x = parseInt(_x, 10);
+    const y = parseInt(_y, 10);
     if (
-      x < 0 ||
-      x >= opponent.gameboard.boardLength ||
-      y < 0 ||
-      y >= opponent.gameboard.boardLength
+      x < 0
+      || x >= opponent.gameboard.boardLength
+      || y < 0
+      || y >= opponent.gameboard.boardLength
     ) {
-      throw new Error("Attack out of bounds");
+      throw new Error('Attack out of bounds');
     }
     if (
       opponent.gameboard.shotRecord.filter((e) => e.x === x && e.y === y)
-        .length != 0
+        .length !== 0
     ) {
-      throw new Error("Attack redundant");
+      throw new Error('Attack redundant');
     }
-    
+
     return { success: opponent.gameboard.receiveAttack(x, y), x, y };
   };
 
   const randomlyPlaceShips = () => {
-    gameboard.fleet.forEach((ship, index, arr) => {
+    gameboard.fleet.forEach((ship) => {
       let orientation = Math.random();
       let xpos = null;
       let ypos = null;
       let axis = null;
       // Randomally pick an axis location that fits the ship
       if (orientation > 0.5) {
-        axis = "x";
+        axis = 'x';
         xpos = Math.floor(
-          Math.random() * (gameboard.boardLength - ship.length)
+          Math.random() * (gameboard.boardLength - ship.length),
         );
         ypos = Math.floor(Math.random() * gameboard.boardLength);
       } else {
-        axis = "y";
+        axis = 'y';
         xpos = Math.floor(Math.random() * gameboard.boardLength);
         ypos = Math.floor(
-          Math.random() * (gameboard.boardLength - ship.length)
+          Math.random() * (gameboard.boardLength - ship.length),
         );
       }
 
@@ -235,16 +224,16 @@ const Player = (_name = null) => {
       while (isBlocked(ship, axis, xpos, ypos, gameboard.occupiedSquares)) {
         orientation = Math.random();
         if (orientation > 0.5) {
-          axis = "x";
+          axis = 'x';
           xpos = Math.floor(
-            Math.random() * (gameboard.boardLength - ship.length)
+            Math.random() * (gameboard.boardLength - ship.length),
           );
           ypos = Math.floor(Math.random() * gameboard.boardLength);
         } else {
-          axis = "y";
+          axis = 'y';
           xpos = Math.floor(Math.random() * gameboard.boardLength);
           ypos = Math.floor(
-            Math.random() * (gameboard.boardLength - ship.length)
+            Math.random() * (gameboard.boardLength - ship.length),
           );
         }
       }
@@ -260,8 +249,8 @@ const Player = (_name = null) => {
   };
 };
 
-let human = Player("You");
-let computer = Player("Computer");
+const human = Player('You');
+const computer = Player('Computer');
 
 // Give computer an attack strategy
 computer.randomAttack = function (enemy) {
@@ -279,25 +268,24 @@ computer.randomAttack = function (enemy) {
 
 // isBlocked() helps computer place its ships
 function isBlocked(ship, axis, xpos, ypos, occSqArr) {
-  let coOrdinatesToTest = [];
-  if (axis === "x") {
+  const coOrdinatesToTest = [];
+  if (axis === 'x') {
     for (let i = 0; i < ship.length; i++) {
-      coOrdinatesToTest.push({ x: parseInt(xpos) + i, y: parseInt(ypos) });
+      coOrdinatesToTest.push({ x: parseInt(xpos, 10) + i, y: parseInt(ypos, 10) });
     }
-  } else if (axis === "y") {
+  } else if (axis === 'y') {
     for (let i = 0; i < ship.length; i++) {
-      coOrdinatesToTest.push({ x: parseInt(xpos), y: parseInt(ypos) + i });
+      coOrdinatesToTest.push({ x: parseInt(xpos, 10), y: parseInt(ypos, 10) + i });
     }
   }
   for (let i = 0; i < coOrdinatesToTest.length; i++) {
     if (
       occSqArr.filter(
-        (e) =>
-          e.x == coOrdinatesToTest[i].x &&
-          e.y == coOrdinatesToTest[i].y &&
-          e.x !== null &&
-          e.y !== null &&
-          e.name !== ship.name
+        (e) => e.x == coOrdinatesToTest[i].x
+          && e.y == coOrdinatesToTest[i].y
+          && e.x !== null
+          && e.y !== null
+          && e.name !== ship.name,
       ).length > 0
     ) {
       return true;
@@ -307,6 +295,8 @@ function isBlocked(ship, axis, xpos, ypos, occSqArr) {
 }
 
 computer.randomlyPlaceShips();
-//human.randomlyPlaceShips();
+// human.randomlyPlaceShips();
 
-export { Ship, Fleet, Gameboard, Player, computer, human, isBlocked };
+export {
+  Ship, Fleet, Gameboard, Player, computer, human, isBlocked,
+};
