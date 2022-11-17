@@ -322,7 +322,6 @@ computer.strategicAttack = (enemy) => {
   let goodMovesArr = enemy.gameboard.shotRecord.filter(e => e.success);
   let lastGoodMove = goodMovesArr[goodMovesArr.length-1];
   if (length === 0 || goodMovesArr.length === 0) {
-    console.log("random1")
     return computer.randomAttack(enemy);
   }
   let adjacentCells = [
@@ -349,7 +348,6 @@ computer.strategicAttack = (enemy) => {
     let move = goodNextMoves[(goodNextMoves.length * Math.random()) | 0];
     return computer.attack(enemy, move.x, move.y);
   } else {
-    console.log("random2")
     return computer.randomAttack(enemy);
   }
 }

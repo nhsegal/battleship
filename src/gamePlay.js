@@ -87,7 +87,6 @@ const game = () => {
   const computerTurn = function () {
     const before = countSunkShips(human);
     const attack = computer.strategicAttack(human);
-    console.log(attack);
     setTimeout(()=> {
       if (attack.success) {
         hitOrMiss.textContent = "You've been hit!";
